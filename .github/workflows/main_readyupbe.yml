@@ -29,6 +29,7 @@ jobs:
         with:
           name: java-app
           path: '${{ github.workspace }}/target/*.jar'
+          run-id: ${{ github.event.workflow_run.id }}
 
   deploy:
     runs-on: ubuntu-latest
