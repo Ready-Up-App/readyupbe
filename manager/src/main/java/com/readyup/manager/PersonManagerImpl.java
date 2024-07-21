@@ -6,6 +6,7 @@ import com.readyup.manager.mapper.PersonMapper;
 import com.readyup.ri.entity.PersonEntity;
 import com.readyup.ri.repository.PersonRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 
 import java.util.List;
 
@@ -14,37 +15,35 @@ public class PersonManagerImpl implements PersonManager {
 
 
     private final PersonRepository personRepository;
-    private final PersonMapper personMapper;
 
-    public PersonManagerImpl(PersonRepository personRepository, PersonMapper personMapper) {
+    public PersonManagerImpl(PersonRepository personRepository) {
         this.personRepository = personRepository;
-        this.personMapper = personMapper;
     }
 
     @Override
     public List<Person> getAllPeople() {
-        return personRepository.findAllPeople().stream().map(personMapper::entityToDomain).toList();
+        return PersonMapper.INSTANCE.mapAllEntities(personRepository.findAllPeople()).stream().toList();
     }
 
     @Override
     public Person getPerson(String username) {
-        return personMapper.entityToDomain(personRepository.findPerson(username));
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        PersonEntity person = personRepository.findPerson(username);
+        stopWatch.stop();
+        System.out.println("GetPerson took: " + stopWatch.getTotalTimeSeconds());
+
+        return PersonMapper.INSTANCE.map(person);
     }
 
     @Override
     public Person createPerson(Person person) {
-        return personMapper.entityToDomain(personRepository.createPerson(personMapper.domainToEntity(person)));
+        return PersonMapper.INSTANCE.map(personRepository.createPerson(PersonMapper.INSTANCE.map(person)));
     }
 
     @Override
     public void friendRequest(String fromUsername, String toUsername) {
         personRepository.friendRequest(fromUsername, toUsername);
     }
-
-    @Override
-    public PersonMapper mapper() {
-        return personMapper;
-    }
-
 
 }

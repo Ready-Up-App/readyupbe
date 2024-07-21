@@ -2,8 +2,6 @@ package com.readyup.domain;
 
 import lombok.*;
 
-import java.util.List;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -17,5 +15,6 @@ public class Person {
     private String lastname;
     private String email;
     private String username;
-//    private List<Person> friendsList;
+    private String createDtm;
+//    private Group group;
 }

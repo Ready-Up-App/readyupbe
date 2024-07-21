@@ -17,14 +17,18 @@ import java.util.List;
         produces = MediaType.APPLICATION_JSON_VALUE)
 public interface PersonEndpointDefinition {
 
+    //DEVTOOL
     @ApiOperation(value = "Get all people in the DB")
     ResponseEntity<List<Person>> getAll();
 
+    //NO AUTH
     @ApiOperation(value = "Create a person if they do not already exist")
     ResponseEntity<CreatePersonResponse> createPerson(@RequestBody CreatePersonRequest request);
 
-
-    @ApiOperation(value = "Create a person if they do not already exist")
+    //AUTH on fromUsername user
+    @ApiOperation(value = "Send a friend request to an account's username")
     ResponseEntity friendRequest(@RequestBody FriendRequest request);
+
+
 
 }

@@ -11,6 +11,7 @@ import com.readyup.ri.entity.PersonEntity;
 import com.readyup.ri.repository.GroupRepository;
 import com.readyup.ri.repository.PersonRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,22 +22,24 @@ public class GroupManagerImpl implements GroupManager {
 
     private final GroupRepository groupRepository;
     private final PersonManager personManager;
-    private final GroupMapper groupMapper;
 
     public GroupManagerImpl(GroupRepository groupRepository, GroupMapper groupMapper, PersonManager personManager) {
         this.groupRepository = groupRepository;
-        this.groupMapper = groupMapper;
         this.personManager = personManager;
     }
 
     @Override
     public boolean create(Group group, String requesterUsername) {
-        PersonEntity owner = personManager.mapper().domainToEntity(personManager.getPerson(requesterUsername));
+        Person owner = personManager.getPerson(requesterUsername);
+
         if (Objects.isNull(owner)) {
             return false;
         }
-        GroupEntity newGroup = groupMapper.domainToEntity(group);
-        newGroup.addGroupMember(owner);
+
+        PersonEntity ownerEntity = PersonMapper.INSTANCE.map(owner);
+        GroupEntity newGroup = GroupMapper.INSTANCE.map(group);
+
+        newGroup.addGroupMember(ownerEntity);
         groupRepository.create(newGroup);
         return true;
     }
@@ -50,18 +53,18 @@ public class GroupManagerImpl implements GroupManager {
 
     @Override
     public List<Group> getAllGroups() {
-        return groupRepository.getAllGroups().stream().map(groupMapper::entityToDomain).toList();
+        return groupRepository.getAllGroups().stream().map(GroupMapper.INSTANCE::map).toList();
     }
 
     @Override
     public void addMember(String username, String groupUid) {
         Optional<GroupEntity> foundGroupEntity = groupRepository.getGroup(groupUid);
 
+//        groupRepository.addPersonToGroup(groupUid, username);
 
         if (foundGroupEntity.isPresent()) {
             GroupEntity entity = foundGroupEntity.get();
-            PersonEntity personToAdd = personManager.mapper()
-                    .domainToEntity(personManager.getPerson(username));
+            PersonEntity personToAdd = PersonMapper.INSTANCE.map(personManager.getPerson(username));
             entity.addGroupMember(personToAdd);
             groupRepository.update(entity);
         }
@@ -69,12 +72,12 @@ public class GroupManagerImpl implements GroupManager {
 
     @Override
     public boolean update(Group group) {
-        return groupRepository.update(groupMapper.domainToEntity(group)) != null;
+        return groupRepository.update(GroupMapper.INSTANCE.map(group)) != null;
     }
 
     @Override
     public boolean delete(Group group) {
-        return groupRepository.delete(groupMapper.domainToEntity(group)) == null;
+        return groupRepository.delete(GroupMapper.INSTANCE.map(group)) == null;
     }
 
 }

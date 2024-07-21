@@ -15,5 +15,4 @@ public interface PersonManager {
 
     void friendRequest(String fromUsername, String toUsername);
 
-    PersonMapper mapper();
 }
