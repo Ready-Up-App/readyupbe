@@ -15,6 +15,7 @@
 
 	<properties>
 		<java.version>21</java.version>
+		<start-class>com.readyup.SpringbootApplication</start-class>
 	</properties>
 
     <dependencies>
@@ -36,7 +37,11 @@
 			<groupId>com.readyup</groupId>
 			<artifactId>api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.readyup</groupId>
+			<artifactId>manager</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>me.paulschwarz</groupId>
@@ -45,23 +50,14 @@
 		</dependency>
 	</dependencies>
 
-
-
 	<build>
         <finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.4.3</version>
-                <!-- <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>            
-                    </execution>
-                <executions> -->
 			</plugin>
 		</plugins>
 	</build>
+
 </project>
