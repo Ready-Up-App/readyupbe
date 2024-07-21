@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.neo4j.core.schema.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,12 @@ public class GroupEntity {
 
     @Property("name")
     private String name;
+
+    @Property("description")
+    private String description;
+
+    @Property("crt_dtm")
+    private LocalDateTime createDtm;
 
     @Relationship(type = "MEMBER_OF", direction = Relationship.Direction.INCOMING)
     private List<MemberOf> attendees;

@@ -14,4 +14,12 @@ public interface GroupRepositoryJpa extends Neo4jRepository<GroupEntity, Long> {
             "WHERE p.username = $username " +
             "RETURN g")
     Optional<GroupEntity> findByAttendee(String username);
+
+    @Query("MATCH (p:Person) " +
+            "WHERE p.username = $username " +
+            "MATCH (g:Group) " +
+            "WHERE g.name = $groupUid " +
+            "CREATE (g)<-[:MEMBER_OF {owner: true}]-(p) " +
+            "RETURN g")
+    Optional<GroupEntity> addPersonToGroup(String groupUid, String username);
 }

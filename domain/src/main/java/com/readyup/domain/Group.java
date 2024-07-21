@@ -1,12 +1,12 @@
 package com.readyup.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -17,5 +17,7 @@ public class Group {
 
     private Long id;
     private String name;
-    private Set<Person> attendees;
+    private LocalDateTime createDtm;
+    private String description;
+    private List<Person> attendees;
 }

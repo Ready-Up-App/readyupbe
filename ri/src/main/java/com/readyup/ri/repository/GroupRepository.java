@@ -59,4 +59,8 @@ public class GroupRepository {
     public Optional<GroupEntity> getGroup(String groupUid) {
         return groupRepositoryJpa.findByName(groupUid);
     }
+
+    public Optional<GroupEntity> addPersonToGroup(String groupUid, String username) {
+        return groupRepositoryJpa.addPersonToGroup(groupUid, username);
+    }
 }

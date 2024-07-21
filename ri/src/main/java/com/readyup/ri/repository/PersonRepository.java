@@ -2,8 +2,6 @@ package com.readyup.ri.repository;
 
 import com.readyup.ri.entity.PersonEntity;
 import com.readyup.ri.repository.jpa.PersonRepositoryJpa;
-import org.neo4j.driver.Values;
-import org.neo4j.driver.internal.value.MapValue;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,17 +25,13 @@ public class PersonRepository {
     }
 
     public PersonEntity createPerson(PersonEntity person) {
-        PersonEntity foundPerson = personRepositoryJpa.findByKey(person.getUsername());
-
-        if (Objects.nonNull(foundPerson)) {
-            throw new RuntimeException("Person Exists already");
-        }
-
+        //throws exception due to constraint on database for unique username
         return personRepositoryJpa.save(person);
     }
 
     public Boolean friendRequest(String fromUsername, String toUsername) {
-        Map<String, PersonEntity> peopleMap = personRepositoryJpa.findByKeys(List.of(fromUsername, toUsername))
+
+        Map<String, PersonEntity> peopleMap = personRepositoryJpa.findByUsernames(List.of(fromUsername, toUsername))
                 .stream().collect(Collectors.toMap(PersonEntity::getUsername, Function.identity()));
         PersonEntity from = peopleMap.get(fromUsername);
         PersonEntity to = peopleMap.get(toUsername);
@@ -46,14 +40,13 @@ public class PersonRepository {
             || Objects.isNull(to)) {
             return false;
         }
-        from.addFriend(to);
-        to.addFriend(from);
+        from.requestFriend(to);
         personRepositoryJpa.saveAll(List.of(from, to));
         return true;
     }
 
 
     public PersonEntity findPerson(String username) {
-        return personRepositoryJpa.findByKey(username);
+        return personRepositoryJpa.findByUsername(username);
     }
 }

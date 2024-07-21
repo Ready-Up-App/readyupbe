@@ -49,6 +49,7 @@ public class PersonEndpoint implements PersonEndpointDefinition {
                 .username(request.getUsername())
                 .email(request.getEmail())
                     .build();
+
         response.setCreatedPerson(personManager.createPerson(personToCreate));
 
         return ResponseEntity.ok(response);
