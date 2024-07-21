@@ -56,6 +56,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'readyupbe'
-          slot-name: 'Production'
-          package: '*.jar'
+          slot-name: 'Develop'
+          package: 'jar/*.jar'
           
