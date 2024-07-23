@@ -3,8 +3,10 @@ package com.readyup.api.endpoint;
 import com.readyup.api.endpointdefinition.AuthEndpointDefinition;
 import com.readyup.api.request.SignInRequest;
 import com.readyup.api.request.SignUpRequest;
+import com.readyup.api.response.SignInResponse;
 import com.readyup.domain.Person;
 import com.readyup.manager.definitions.AuthManager;
+import com.readyup.security.jwt.JwtGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthEndpoint implements AuthEndpointDefinition {
 
     private final AuthManager authManager;
+    private final JwtGenerator jwtGenerator;
 
     @Autowired
-    public AuthEndpoint(AuthManager authManager) {
+    public AuthEndpoint(AuthManager authManager, JwtGenerator jwtGenerator) {
         this.authManager = authManager;
+        this.jwtGenerator = jwtGenerator;
     }
 
     @Override
@@ -45,10 +49,11 @@ public class AuthEndpoint implements AuthEndpointDefinition {
 
     @Override
     @PostMapping("/signIn")
-    public ResponseEntity<String> signIn(SignInRequest request) {
+    public ResponseEntity<SignInResponse> signIn(SignInRequest request) {
         Authentication authentication = authManager.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User signed in", HttpStatus.OK);
+        String token = jwtGenerator.generateToken(authentication);
+        return new ResponseEntity<>(new SignInResponse(token), HttpStatus.OK);
     }
 
 
