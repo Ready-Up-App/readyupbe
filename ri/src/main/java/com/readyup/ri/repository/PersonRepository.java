@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class PersonRepository {
     }
 
 
-    public PersonEntity findPerson(String username) {
+    public Optional<PersonEntity> findPerson(String username) {
         return personRepositoryJpa.findByUsername(username);
     }
 }

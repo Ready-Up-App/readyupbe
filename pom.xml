@@ -25,5 +25,7 @@
 		<module>ri</module>
 		<module>domain</module>
 		<module>manager</module>
+        <module>security</module>
+		<module>common</module>
 	</modules>
 </project>

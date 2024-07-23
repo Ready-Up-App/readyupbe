@@ -26,6 +26,7 @@ public class PersonEndpoint implements PersonEndpointDefinition {
     }
 
     @Override
+//    @PreAuthorize("hasRole('U SER')")
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<Person>> getAll() {
         return ResponseEntity.ok(personManager.getAllPeople());

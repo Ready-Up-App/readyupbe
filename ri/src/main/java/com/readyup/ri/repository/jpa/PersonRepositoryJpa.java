@@ -5,12 +5,13 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PersonRepositoryJpa extends Neo4jRepository<PersonEntity, Long> {
     @Query("MATCH (p:Person) " +
             "WHERE p.username = $username " +
             "RETURN p")
-    PersonEntity findByUsername(String username);
+    Optional<PersonEntity> findByUsername(String username);
 
     @Query("MATCH (p:Person) " +
             "WHERE p.username in $usernames " +

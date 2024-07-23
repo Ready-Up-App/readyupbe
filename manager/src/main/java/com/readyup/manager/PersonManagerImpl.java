@@ -27,11 +27,7 @@ public class PersonManagerImpl implements PersonManager {
 
     @Override
     public Person getPerson(String username) {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        PersonEntity person = personRepository.findPerson(username);
-        stopWatch.stop();
-        System.out.println("GetPerson took: " + stopWatch.getTotalTimeSeconds());
+        PersonEntity person = personRepository.findPerson(username).orElse(null);
 
         return PersonMapper.INSTANCE.map(person);
     }
@@ -45,5 +41,11 @@ public class PersonManagerImpl implements PersonManager {
     public void friendRequest(String fromUsername, String toUsername) {
         personRepository.friendRequest(fromUsername, toUsername);
     }
+
+    @Override
+    public Boolean personExists(String username) {
+        return personRepository.findPerson(username).isPresent();
+    }
+
 
 }

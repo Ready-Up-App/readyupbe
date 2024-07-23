@@ -15,6 +15,7 @@ public class Person {
     private String lastname;
     private String email;
     private String username;
+    private String password;
     private String createDtm;
 //    private Group group;
 }

@@ -14,5 +14,6 @@ public interface PersonManager {
     Person createPerson(Person person);
 
     void friendRequest(String fromUsername, String toUsername);
+    Boolean personExists(String username);
 
 }

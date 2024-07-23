@@ -1,0 +1,5 @@
+//CONSTRAINTS
+CREATE CONSTRAINT person_has_password IF NOT EXISTS FOR (person:Person) REQUIRE person.password IS NOT NULL;
+CREATE CONSTRAINT person_username IF NOT EXISTS FOR (person:Person) REQUiRE (person.username) IS NODE KEY;
+CREATE CONSTRAINT group_crt_dtm IF NOT EXISTS FOR (group:Group) REQUIRE group.crt_dtm IS NOT NULL;
+CREATE CONSTRAINT member_of_props IF NOT EXISTS FOR ()-[memberOf:MEMBER_OF]-() REQUIRE memberOf.owner IS NOT NULL;
