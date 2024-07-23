@@ -1,12 +1,8 @@
 package com.readyup.api.request;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class FriendRequest {
     private String fromUsername;
     private String toUsername;

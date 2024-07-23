@@ -16,24 +16,21 @@ public class PersonEntity {
     @GeneratedValue
     private Long id;
 
-    @Property("firstname")
-    private String firstname;
-
-    @Property("lastname")
-    private String lastname;
-
     @Property("username")
     private String username;
-
+    @Property("password")
+    private String password;
+    @Property("firstname")
+    private String firstname;
+    @Property("lastname")
+    private String lastname;
     @Property("email")
     private String email;
-
     @Property("createDtm")
     private LocalDateTime createDtm;
 
     @Relationship(type = "FRIENDS_WITH", direction = Relationship.Direction.OUTGOING)
     private List<FriendWith> friendsList;
-
 //    @Relationship(type = "MEMBER_OF", direction = Relationship.Direction.OUTGOING)
 //    private GroupEntity group;
 

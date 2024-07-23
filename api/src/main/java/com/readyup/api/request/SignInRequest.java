@@ -3,8 +3,7 @@ package com.readyup.api.request;
 import lombok.Data;
 
 @Data
-public class AddToGroupRequest {
+public class SignInRequest {
     private String username;
-    private String groupUid;
+    private String password;
 }
-
