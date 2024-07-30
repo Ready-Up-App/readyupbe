@@ -9,7 +9,10 @@ import com.readyup.domain.Person;
 import com.readyup.manager.definitions.AuthManager;
 import com.readyup.manager.definitions.GroupManager;
 
+import com.readyup.security.jwt.JwtGenerator;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.readyup.api.endpointdefinition.GroupEndpointDefinition;
@@ -20,9 +23,11 @@ import java.util.List;
 @RequestMapping(path = "/api/groups")
 public class GroupEndpoint implements GroupEndpointDefinition {
 
+    private final JwtGenerator jwtGenerator;
     private final GroupManager groupManager;
 
-    public GroupEndpoint(GroupManager groupManager) {
+    public GroupEndpoint(JwtGenerator jwtGenerator, GroupManager groupManager) {
+        this.jwtGenerator = jwtGenerator;
         this.groupManager = groupManager;
     }
 
@@ -59,10 +64,10 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     @Override
     @GetMapping(value = "/getJoinable")
     public ResponseEntity<List<Group>> getJoinableGroups(String bearerToken) {
-        System.out.print(bearerToken);
-//        authManager.getAuthenticationManager().
-//        groupManager.getJoinable()
-        return null;
+        String username = jwtGenerator.getUsernameFromBearer(bearerToken);
+
+        List<Group> groups = groupManager.getJoinableGroups(username);
+        return ResponseEntity.ok(groups);
     }
 
 

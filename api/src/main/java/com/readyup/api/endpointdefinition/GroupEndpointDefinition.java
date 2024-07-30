@@ -34,6 +34,6 @@ public interface GroupEndpointDefinition {
     ResponseEntity<Group> addToGroup(@RequestBody AddToGroupRequest request);
 
     @ApiOperation(value = "Get joinable groups")
-    ResponseEntity<List<Group>> getJoinableGroups(@RequestHeader(name = "Authorization", required = false) String customHeader);
+    ResponseEntity<List<Group>> getJoinableGroups(@RequestHeader(name = "Authorization", required = true) String bearerToken);
 
 }

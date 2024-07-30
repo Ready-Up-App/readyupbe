@@ -63,4 +63,9 @@ public class GroupRepository {
     public Optional<GroupEntity> addPersonToGroup(String groupUid, String username) {
         return groupRepositoryJpa.addPersonToGroup(groupUid, username);
     }
+
+    public List<GroupEntity> getJoinableGroups(String username) {
+        List<GroupEntity> ge = groupRepositoryJpa.findAllJoinableGroupsByUsername(username);
+        return ge;
+    }
 }

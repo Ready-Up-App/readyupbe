@@ -71,6 +71,12 @@ public class GroupManagerImpl implements GroupManager {
     }
 
     @Override
+    public List<Group> getJoinableGroups(String username) {
+        return GroupMapper.INSTANCE.mapAllEntities(groupRepository.getJoinableGroups(username))
+                .stream().toList();
+    }
+
+    @Override
     public boolean update(Group group) {
         return groupRepository.update(GroupMapper.INSTANCE.map(group)) != null;
     }

@@ -44,15 +44,15 @@ public class WebSecurityConfig{
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
-                .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers(HttpMethod.POST, "/api/auth/*").permitAll();
-                    authorize.anyRequest().authenticated();
-                })
+//                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
+//                .authorizeHttpRequests(authorize -> {
+//                    authorize.requestMatchers(HttpMethod.POST, "/api/auth/*").permitAll();
+//                    authorize.anyRequest().authenticated();
+//                })
                 .sessionManagement(session ->
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
