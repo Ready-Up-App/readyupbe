@@ -4,6 +4,7 @@ import com.readyup.api.endpointdefinition.AuthEndpointDefinition;
 import com.readyup.api.request.SignInRequest;
 import com.readyup.api.request.SignUpRequest;
 import com.readyup.api.response.SignInResponse;
+import com.readyup.api.response.SignUpResponse;
 import com.readyup.domain.Person;
 import com.readyup.manager.definitions.AuthManager;
 import com.readyup.security.jwt.JwtGenerator;
@@ -13,12 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin
 public class AuthEndpoint implements AuthEndpointDefinition {
 
     private final AuthManager authManager;
@@ -32,9 +35,9 @@ public class AuthEndpoint implements AuthEndpointDefinition {
 
     @Override
     @PostMapping("/signUp")
-    public ResponseEntity<String> signUp(SignUpRequest request) {
+    public ResponseEntity<SignUpResponse> signUp(SignUpRequest request) {
         if (authManager.existsByUsername(request.getUsername())) {
-            return new ResponseEntity<>("Username taken!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new SignUpResponse("That username is taken!"), HttpStatus.BAD_REQUEST);
         }
         Person newPerson = Person.builder()
                 .username(request.getUsername())
@@ -44,17 +47,23 @@ public class AuthEndpoint implements AuthEndpointDefinition {
                 .lastname(request.getLastname())
                     .build();
         authManager.createUser(newPerson);
-        return new ResponseEntity<>("User "+ newPerson.getUsername() +" created!", HttpStatus.OK);
+        SignUpResponse response =  new SignUpResponse();
+        response.setAccessToken(authenticate(request.getUsername(), request.getPassword()));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override
     @PostMapping("/signIn")
     public ResponseEntity<SignInResponse> signIn(SignInRequest request) {
-        Authentication authentication = authManager.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtGenerator.generateToken(authentication);
+        String token = authenticate(request.getUsername(), request.getPassword());
         return new ResponseEntity<>(new SignInResponse(token), HttpStatus.OK);
     }
 
 
+    private String authenticate(String username, String password) {
+        Authentication authentication = authManager.getAuthenticationManager()
+                .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return jwtGenerator.generateToken(authentication);
+    }
 }

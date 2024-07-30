@@ -3,6 +3,7 @@ package com.readyup.api.endpointdefinition;
 import com.readyup.api.request.SignInRequest;
 import com.readyup.api.request.SignUpRequest;
 import com.readyup.api.response.SignInResponse;
+import com.readyup.api.response.SignUpResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface AuthEndpointDefinition {
 
     @ApiOperation(value = "signUp")
-    ResponseEntity<String> signUp(@RequestBody SignUpRequest request);
+    ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest request);
 
     @ApiOperation(value = "signIn")
     ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest request);
