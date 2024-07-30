@@ -23,12 +23,6 @@ public interface GroupEndpointDefinition {
     ResponseEntity<Boolean> create(@RequestBody CreateGroupRequest request);
 
 
-    @ApiOperation(value = "Update existing group, error if does not exist")
-    ResponseEntity<Boolean> update(@RequestBody Group group);
-
-    @ApiOperation(value = "Delete group")
-    ResponseEntity<Boolean> delete(@RequestBody Group group);
-
     @ApiOperation(value = "Get group, error or null if not exist")
     ResponseEntity<GroupResponse> getGroupFor(@RequestBody GetGroupForRequest request);
 

@@ -36,20 +36,6 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     }
 
     @Override
-//    @PostMapping(value = "/update")
-    public ResponseEntity<Boolean> update(Group request) {
-        Boolean response = groupManager.update(request);
-        return ResponseEntity.ok(response);
-    }
-
-    @Override
-//    @PostMapping(value = "/delete")
-    public ResponseEntity<Boolean> delete(Group request) {
-        Boolean response = groupManager.delete(request);
-        return ResponseEntity.ok(response);
-    }
-
-    @Override
     @PostMapping(value = "/getGroupFor")
     public ResponseEntity<GroupResponse> getGroupFor(GetGroupForRequest request) {
         Person person = new Person();
