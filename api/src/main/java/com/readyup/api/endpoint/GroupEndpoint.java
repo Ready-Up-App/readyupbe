@@ -6,13 +6,11 @@ import com.readyup.api.response.GroupResponse;
 import com.readyup.api.request.GetGroupForRequest;
 import com.readyup.domain.Group;
 import com.readyup.domain.Person;
+import com.readyup.manager.definitions.AuthManager;
 import com.readyup.manager.definitions.GroupManager;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.readyup.api.endpointdefinition.GroupEndpointDefinition;
 
@@ -53,7 +51,7 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     @PostMapping(value = "/getGroupFor")
     public ResponseEntity<GroupResponse> getGroupFor(GetGroupForRequest request) {
         Person person = new Person();
-        person.setFirstname(request.getPersonName());
+        person.setUsername(request.getUsername());
 
         Group response = groupManager.getGroupFor(person);
         return ResponseEntity.ok(new GroupResponse(response));
@@ -70,6 +68,15 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     public ResponseEntity<Group> addToGroup(AddToGroupRequest request) {
         groupManager.addMember(request.getUsername(), request.getGroupUid());
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    @GetMapping(value = "/getJoinable")
+    public ResponseEntity<List<Group>> getJoinableGroups(String bearerToken) {
+        System.out.print(bearerToken);
+//        authManager.getAuthenticationManager().
+//        groupManager.getJoinable()
+        return null;
     }
 
 

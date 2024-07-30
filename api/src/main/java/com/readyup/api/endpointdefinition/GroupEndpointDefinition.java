@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -38,5 +39,7 @@ public interface GroupEndpointDefinition {
     @ApiOperation(value = "Add a user to an existing group")
     ResponseEntity<Group> addToGroup(@RequestBody AddToGroupRequest request);
 
+    @ApiOperation(value = "Get joinable groups")
+    ResponseEntity<List<Group>> getJoinableGroups(@RequestHeader(name = "Authorization", required = false) String customHeader);
 
 }
