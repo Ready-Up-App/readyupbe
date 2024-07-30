@@ -8,6 +8,6 @@ import lombok.Setter;
 @Data
 public class GetGroupForRequest {
 
-    private String personName;
+    private String username;
     private Long id;
 }

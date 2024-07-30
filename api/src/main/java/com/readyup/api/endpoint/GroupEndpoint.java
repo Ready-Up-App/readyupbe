@@ -6,13 +6,14 @@ import com.readyup.api.response.GroupResponse;
 import com.readyup.api.request.GetGroupForRequest;
 import com.readyup.domain.Group;
 import com.readyup.domain.Person;
+import com.readyup.manager.definitions.AuthManager;
 import com.readyup.manager.definitions.GroupManager;
 
+import com.readyup.security.jwt.JwtGenerator;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import com.readyup.api.endpointdefinition.GroupEndpointDefinition;
 
@@ -22,9 +23,11 @@ import java.util.List;
 @RequestMapping(path = "/api/groups")
 public class GroupEndpoint implements GroupEndpointDefinition {
 
+    private final JwtGenerator jwtGenerator;
     private final GroupManager groupManager;
 
-    public GroupEndpoint(GroupManager groupManager) {
+    public GroupEndpoint(JwtGenerator jwtGenerator, GroupManager groupManager) {
+        this.jwtGenerator = jwtGenerator;
         this.groupManager = groupManager;
     }
 
@@ -39,7 +42,7 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     @PostMapping(value = "/getGroupFor")
     public ResponseEntity<GroupResponse> getGroupFor(GetGroupForRequest request) {
         Person person = new Person();
-        person.setFirstname(request.getPersonName());
+        person.setUsername(request.getUsername());
 
         Group response = groupManager.getGroupFor(person);
         return ResponseEntity.ok(new GroupResponse(response));
@@ -56,6 +59,15 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     public ResponseEntity<Group> addToGroup(AddToGroupRequest request) {
         groupManager.addMember(request.getUsername(), request.getGroupUid());
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    @GetMapping(value = "/getJoinable")
+    public ResponseEntity<List<Group>> getJoinableGroups(String bearerToken) {
+        String username = jwtGenerator.getUsernameFromBearer(bearerToken);
+
+        List<Group> groups = groupManager.getJoinableGroups(username);
+        return ResponseEntity.ok(groups);
     }
 
 

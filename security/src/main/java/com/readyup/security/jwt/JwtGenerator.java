@@ -45,6 +45,10 @@ public class JwtGenerator {
         return claims.getSubject();
     }
 
+    public String getUsernameFromBearer(String bearer) {
+        return getUsernameFromJWT(parseBearerJWT(bearer));
+    }
+
     public boolean validateToken(String token) {
         try {
             jwtParser.parseClaimsJws(token).getBody();
@@ -52,5 +56,11 @@ public class JwtGenerator {
         } catch (Exception e) {
             throw new AuthenticationCredentialsNotFoundException("JET expired or invalid");
         }
+    }
+
+    public String parseBearerJWT(String bearerToken) {
+        StringBuilder ss = new StringBuilder(bearerToken);
+        ss.delete(0,7);
+        return ss.toString();
     }
 }

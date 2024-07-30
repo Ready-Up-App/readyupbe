@@ -14,4 +14,6 @@ public interface GroupManager {
     List<Group> getAllGroups();
 
     void addMember(String username, String groupUid);
+
+    List<Group> getJoinableGroups(String username);
 }
