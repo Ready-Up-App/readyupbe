@@ -32,7 +32,7 @@ public class GroupManagerImpl implements GroupManager {
     public boolean create(Group group, String requesterUsername) {
         Person owner = personManager.getPerson(requesterUsername);
 
-        if (Objects.isNull(owner)) {
+        if (owner == null) {
             return false;
         }
 

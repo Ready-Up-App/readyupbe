@@ -38,8 +38,7 @@ public class PersonRepository {
         PersonEntity from = peopleMap.get(fromUsername);
         PersonEntity to = peopleMap.get(toUsername);
 
-        if (Objects.isNull(from)
-            || Objects.isNull(to)) {
+        if (from == null || to == null) {
             return false;
         }
 
@@ -70,5 +69,13 @@ public class PersonRepository {
                 .filter((friend) -> friend.getRecipient().getUsername().equals(first.getUsername()))
                 .findFirst();
         return friendWith.isPresent();
+    }
+
+    public List<PersonEntity> getFriends(String username) {
+        return personRepositoryJpa.findFriends(username);
+    }
+
+    public List<PersonEntity> getPendingFriends(String username) {
+        return personRepositoryJpa.findPendingFriends(username);
     }
 }

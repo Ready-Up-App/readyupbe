@@ -3,12 +3,14 @@ package com.readyup.api.endpointdefinition;
 import com.readyup.api.request.CreatePersonRequest;
 import com.readyup.api.request.FriendRequest;
 import com.readyup.api.response.CreatePersonResponse;
+import com.readyup.api.response.GetFriendsResponse;
 import com.readyup.domain.Person;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -29,6 +31,7 @@ public interface PersonEndpointDefinition {
     @ApiOperation(value = "Send a friend request to an account's username")
     ResponseEntity friendRequest(@RequestBody FriendRequest request);
 
-
+    @ApiOperation(value = "Get all friends in friends list")
+    ResponseEntity<GetFriendsResponse> getFriends(@RequestHeader(name = "Authorization", required = true) String bearerToken);
 
 }
