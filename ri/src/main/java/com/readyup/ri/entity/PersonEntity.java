@@ -42,4 +42,5 @@ public class PersonEntity {
         }
         friendsList.add(FriendWith.builder().recipient(person).accepted(false).build());
     }
+
 }

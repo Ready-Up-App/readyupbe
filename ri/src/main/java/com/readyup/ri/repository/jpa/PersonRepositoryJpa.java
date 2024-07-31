@@ -10,12 +10,14 @@ import java.util.Optional;
 public interface PersonRepositoryJpa extends Neo4jRepository<PersonEntity, Long> {
     @Query("MATCH (p:Person) " +
             "WHERE p.username = $username " +
-            "RETURN p")
+            "OPTIONAL MATCH (p)-[f:FRIENDS_WITH]->(other:Person)" +
+            "RETURN p, collect(f), collect(other)")
     Optional<PersonEntity> findByUsername(String username);
 
-    @Query("MATCH (p:Person) " +
+    @Query("MATCH (p:Person)" +
             "WHERE p.username in $usernames " +
-            "RETURN p")
+            "OPTIONAL MATCH (p)-[f:FRIENDS_WITH]->(other:Person) " +
+            "RETURN p, collect(f), collect(other)")
     List<PersonEntity> findByUsernames(List<String> usernames);
 
     @Query("MATCH (requester:Person)-[rel:FRIENDS_WITH]-(friend:Person) " +
