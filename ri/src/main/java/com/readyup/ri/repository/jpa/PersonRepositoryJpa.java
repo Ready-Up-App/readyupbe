@@ -1,6 +1,7 @@
 package com.readyup.ri.repository.jpa;
 
 import com.readyup.ri.entity.PersonEntity;
+import com.readyup.ri.relationship.FriendWith;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 
@@ -20,8 +21,16 @@ public interface PersonRepositoryJpa extends Neo4jRepository<PersonEntity, Long>
             "RETURN p, collect(f), collect(other)")
     List<PersonEntity> findByUsernames(List<String> usernames);
 
-    @Query("MATCH (requester:Person)-[rel:FRIENDS_WITH]-(friend:Person) " +
-            "WHERE requester.username = $username AND rel.accepted")
+//    @Query("MATCH path = (p:Person {username: $username})-[rel:FRIENDS_WITH]-(friend:Person) " +
+//            "RETURN nodes(path) as PersonEntity, collect(rel)")
+    @Query("MATCH (p:Person)-[rel:FRIENDS_WITH]-(friend:Person) " +
+            "WHERE p.username = $username AND rel.accepted = TRUE " +
+            "RETURN friend")
     List<PersonEntity> findFriends(String username);
+
+    @Query("MATCH (p:Person)-[rel:FRIENDS_WITH]-(friend:Person) " +
+            "WHERE p.username = $username AND rel.accepted = FALSE " +
+            "RETURN friend")
+    List<PersonEntity> findPendingFriends(String username);
 
 }

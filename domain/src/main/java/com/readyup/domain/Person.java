@@ -1,6 +1,7 @@
 package com.readyup.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public class Person {
     private String lastname;
     private String email;
     private String username;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String password;
     private String createDtm;
 

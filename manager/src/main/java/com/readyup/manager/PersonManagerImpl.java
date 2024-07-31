@@ -1,14 +1,19 @@
 package com.readyup.manager;
 
+import com.readyup.domain.Friend;
 import com.readyup.domain.Person;
 import com.readyup.manager.definitions.PersonManager;
+import com.readyup.manager.mapper.FriendMapper;
 import com.readyup.manager.mapper.PersonMapper;
 import com.readyup.ri.entity.PersonEntity;
+import com.readyup.ri.relationship.FriendWith;
 import com.readyup.ri.repository.PersonRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class PersonManagerImpl implements PersonManager {
@@ -45,6 +50,14 @@ public class PersonManagerImpl implements PersonManager {
     @Override
     public Boolean personExists(String username) {
         return personRepository.findPerson(username).isPresent();
+    }
+
+    @Override
+    public List<Friend> getFriends(String username) {
+        List<PersonEntity> friends = personRepository.getFriends(username);
+        List<PersonEntity> pendingFriends = personRepository.getPendingFriends(username);
+        
+        return FriendMapper.map(friends, pendingFriends);
     }
 
 
