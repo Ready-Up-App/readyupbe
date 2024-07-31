@@ -1,6 +1,7 @@
 package com.readyup.ri.repository;
 
 import com.readyup.ri.entity.PersonEntity;
+import com.readyup.ri.relationship.FriendWith;
 import com.readyup.ri.repository.jpa.PersonRepositoryJpa;
 import org.springframework.stereotype.Repository;
 
@@ -41,6 +42,12 @@ public class PersonRepository {
             || Objects.isNull(to)) {
             return false;
         }
+
+        //check both directions for whether they are friends
+        if (areFriends(to, from)) {
+            return false;
+        }
+
         from.requestFriend(to);
         personRepositoryJpa.saveAll(List.of(from, to));
         return true;
@@ -49,5 +56,19 @@ public class PersonRepository {
 
     public Optional<PersonEntity> findPerson(String username) {
         return personRepositoryJpa.findByUsername(username);
+    }
+
+    public boolean areFriends(PersonEntity first, PersonEntity second) {
+        Optional<FriendWith> friendWith = first.getFriendsList().parallelStream()
+                .filter((friend) -> friend.getRecipient().getUsername().equals(second.getUsername()))
+                .findFirst();
+        if (friendWith.isPresent()) {
+            return true;
+        }
+
+        friendWith = second.getFriendsList().parallelStream()
+                .filter((friend) -> friend.getRecipient().getUsername().equals(first.getUsername()))
+                .findFirst();
+        return friendWith.isPresent();
     }
 }
