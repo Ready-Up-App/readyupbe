@@ -6,14 +6,10 @@ import com.readyup.manager.definitions.PersonManager;
 import com.readyup.manager.mapper.FriendMapper;
 import com.readyup.manager.mapper.PersonMapper;
 import com.readyup.ri.entity.PersonEntity;
-import com.readyup.ri.relationship.FriendWith;
 import com.readyup.ri.repository.PersonRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StopWatch;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class PersonManagerImpl implements PersonManager {
@@ -58,6 +54,12 @@ public class PersonManagerImpl implements PersonManager {
         List<PersonEntity> pendingFriends = personRepository.getPendingFriends(username);
         
         return FriendMapper.map(friends, pendingFriends);
+    }
+
+    @Override
+    public List<Person> searchUsername(String username) {
+        return PersonMapper.INSTANCE.mapAllEntities(personRepository.searchUsername(username))
+                .stream().toList();
     }
 
 

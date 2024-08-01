@@ -3,6 +3,7 @@ package com.readyup.api.endpoint;
 import com.readyup.api.endpointdefinition.PersonEndpointDefinition;
 import com.readyup.api.request.CreatePersonRequest;
 import com.readyup.api.request.FriendRequest;
+import com.readyup.api.request.SearchUsernameRequest;
 import com.readyup.api.response.CreatePersonResponse;
 import com.readyup.api.response.GetFriendsResponse;
 import com.readyup.api.validator.Validator;
@@ -78,6 +79,14 @@ public class PersonEndpoint implements PersonEndpointDefinition {
                 .friends(personManager.getFriends(username))
                 .build();
         return ResponseEntity.ok(response);
+    }
+
+    @Override
+    @PostMapping(value = "/searchUsername")
+    public ResponseEntity<List<Person>> searchUsername(SearchUsernameRequest request) {
+        List<Person> foundPeople = personManager.searchUsername(request.getUsername());
+
+        return ResponseEntity.ok(foundPeople);
     }
 
 

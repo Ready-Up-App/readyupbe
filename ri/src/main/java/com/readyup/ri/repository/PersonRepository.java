@@ -78,4 +78,8 @@ public class PersonRepository {
     public List<PersonEntity> getPendingFriends(String username) {
         return personRepositoryJpa.findPendingFriends(username);
     }
+
+    public List<PersonEntity> searchUsername(String username) {
+        return personRepositoryJpa.searchUsername(String.format("(?i).*%s.*", username));
+    }
 }
