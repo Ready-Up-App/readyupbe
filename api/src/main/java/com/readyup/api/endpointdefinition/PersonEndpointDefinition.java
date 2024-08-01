@@ -2,6 +2,7 @@ package com.readyup.api.endpointdefinition;
 
 import com.readyup.api.request.CreatePersonRequest;
 import com.readyup.api.request.FriendRequest;
+import com.readyup.api.request.SearchUsernameRequest;
 import com.readyup.api.response.CreatePersonResponse;
 import com.readyup.api.response.GetFriendsResponse;
 import com.readyup.domain.Person;
@@ -33,5 +34,8 @@ public interface PersonEndpointDefinition {
 
     @ApiOperation(value = "Get all friends in friends list")
     ResponseEntity<GetFriendsResponse> getFriends(@RequestHeader(name = "Authorization", required = true) String bearerToken);
+
+    @ApiOperation(value = "Search for a username")
+    ResponseEntity<List<Person>> searchUsername(@RequestBody SearchUsernameRequest request);
 
 }

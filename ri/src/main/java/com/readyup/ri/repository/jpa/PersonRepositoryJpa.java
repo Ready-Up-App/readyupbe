@@ -33,4 +33,8 @@ public interface PersonRepositoryJpa extends Neo4jRepository<PersonEntity, Long>
             "RETURN friend")
     List<PersonEntity> findPendingFriends(String username);
 
+    @Query("MATCH (u:Person) " +
+            "WHERE u.username =~ $username " +
+            "RETURN u ")
+    List<PersonEntity> searchUsername(String username);
 }

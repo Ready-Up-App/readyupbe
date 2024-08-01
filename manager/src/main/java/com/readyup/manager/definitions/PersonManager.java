@@ -15,4 +15,5 @@ public interface PersonManager {
     void friendRequest(String fromUsername, String toUsername);
     Boolean personExists(String username);
     List<Friend> getFriends(String username);
+    List<Person> searchUsername(String username);
 }
