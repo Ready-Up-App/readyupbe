@@ -2,6 +2,7 @@ package com.readyup.api.endpointdefinition;
 
 import com.readyup.api.request.CreatePersonRequest;
 import com.readyup.api.request.FriendRequest;
+import com.readyup.api.request.RespondFriendRequest;
 import com.readyup.api.request.SearchUsernameRequest;
 import com.readyup.api.response.CreatePersonResponse;
 import com.readyup.api.response.GetFriendsResponse;
@@ -30,10 +31,14 @@ public interface PersonEndpointDefinition {
 
     //AUTH on fromUsername user
     @ApiOperation(value = "Send a friend request to an account's username")
-    ResponseEntity friendRequest(@RequestBody FriendRequest request);
+    ResponseEntity friendRequest(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody FriendRequest request);
 
-    @ApiOperation(value = "Get all friends in friends list")
-    ResponseEntity<GetFriendsResponse> getFriends(@RequestHeader(name = "Authorization", required = true) String bearerToken);
+    @ApiOperation(value = "Accept or reject a usernames friend request")
+    ResponseEntity<Boolean> respondFriendRequest(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody RespondFriendRequest request);
+
+
+        @ApiOperation(value = "Get all friends in friends list")
+    ResponseEntity<GetFriendsResponse> getFriends(@RequestHeader(name = "Authorization") String bearerToken);
 
     @ApiOperation(value = "Search for a username")
     ResponseEntity<List<Person>> searchUsername(@RequestBody SearchUsernameRequest request);

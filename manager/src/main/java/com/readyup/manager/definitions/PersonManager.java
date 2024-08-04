@@ -16,4 +16,5 @@ public interface PersonManager {
     Boolean personExists(String username);
     List<Friend> getFriends(String username);
     List<Person> searchUsername(String username);
+    void respondFriendRequest(String username, String otherUsername, Boolean accept);
 }

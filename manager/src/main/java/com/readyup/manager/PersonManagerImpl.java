@@ -62,5 +62,10 @@ public class PersonManagerImpl implements PersonManager {
                 .stream().toList();
     }
 
+    @Override
+    public void respondFriendRequest(String username, String otherUsername, Boolean accept) {
+        personRepository.respondFriendRequest(username, otherUsername, accept);
+    }
+
 
 }
