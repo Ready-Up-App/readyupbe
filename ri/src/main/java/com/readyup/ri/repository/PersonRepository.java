@@ -82,4 +82,13 @@ public class PersonRepository {
     public List<PersonEntity> searchUsername(String username) {
         return personRepositoryJpa.searchUsername(String.format("(?i).*%s.*", username));
     }
+
+    public void respondFriendRequest(String username, String otherUsername, Boolean accept) {
+
+        if (accept) {
+            personRepositoryJpa.acceptFriendRequest(username, otherUsername);
+        } else {
+            personRepositoryJpa.rejectFriendRequest(username, otherUsername);
+        }
+    }
 }

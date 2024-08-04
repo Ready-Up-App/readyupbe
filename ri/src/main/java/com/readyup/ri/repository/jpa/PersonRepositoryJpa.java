@@ -21,8 +21,6 @@ public interface PersonRepositoryJpa extends Neo4jRepository<PersonEntity, Long>
             "RETURN p, collect(f), collect(other)")
     List<PersonEntity> findByUsernames(List<String> usernames);
 
-//    @Query("MATCH path = (p:Person {username: $username})-[rel:FRIENDS_WITH]-(friend:Person) " +
-//            "RETURN nodes(path) as PersonEntity, collect(rel)")
     @Query("MATCH (p:Person)-[rel:FRIENDS_WITH]-(friend:Person) " +
             "WHERE p.username = $username AND rel.accepted = TRUE " +
             "RETURN friend")
@@ -37,4 +35,16 @@ public interface PersonRepositoryJpa extends Neo4jRepository<PersonEntity, Long>
             "WHERE u.username =~ $username " +
             "RETURN u ")
     List<PersonEntity> searchUsername(String username);
+
+    @Query("MATCH (p:Person)<-[rel:FRIENDS_WITH]-(o:Person) " +
+            "WHERE p.username = $username AND o.username = $other " +
+            "AND rel.accepted = false " +
+            "SET rel.accepted = true")
+    void acceptFriendRequest(String username, String other);
+
+    @Query("MATCH (p:Person)<-[rel:FRIENDS_WITH]-(o:Person) " +
+            "WHERE p.username = $username AND o.username = $other " +
+            "AND rel.accepted = false " +
+            "DELETE rel")
+    void rejectFriendRequest(String username, String other);
 }

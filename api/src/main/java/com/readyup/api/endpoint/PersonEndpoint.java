@@ -3,6 +3,7 @@ package com.readyup.api.endpoint;
 import com.readyup.api.endpointdefinition.PersonEndpointDefinition;
 import com.readyup.api.request.CreatePersonRequest;
 import com.readyup.api.request.FriendRequest;
+import com.readyup.api.request.RespondFriendRequest;
 import com.readyup.api.request.SearchUsernameRequest;
 import com.readyup.api.response.CreatePersonResponse;
 import com.readyup.api.response.GetFriendsResponse;
@@ -31,7 +32,6 @@ public class PersonEndpoint implements PersonEndpointDefinition {
     }
 
     @Override
-//    @PreAuthorize("hasRole('U SER')")
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<Person>> getAll() {
         return ResponseEntity.ok(personManager.getAllPeople());
@@ -63,12 +63,28 @@ public class PersonEndpoint implements PersonEndpointDefinition {
 
     @Override
     @PostMapping(value = "/friendRequest")
-    public ResponseEntity friendRequest(FriendRequest request) {
-        if (request.getFromUsername().equals(request.getToUsername())) {
+    public ResponseEntity friendRequest(String bearerToken, FriendRequest request) {
+
+        String username = jwtGenerator.getUsernameFromBearer(bearerToken);
+        if (username.equals(request.getToUsername())) {
             return ResponseEntity.badRequest().build();
         }
-        personManager.friendRequest(request.getFromUsername(), request.getToUsername());
+        personManager.friendRequest(username, request.getToUsername());
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    @PostMapping(value = "/respondFriendRequest")
+    public ResponseEntity<Boolean> respondFriendRequest(String bearerToken, RespondFriendRequest request) {
+        if (request.getOtherUsername() == null || request.getAccept() == null) {
+            return ResponseEntity.badRequest().body(false);
+        }
+
+        String username = jwtGenerator.getUsernameFromBearer(bearerToken);
+
+        personManager.respondFriendRequest(username, request.getOtherUsername(), request.getAccept());
+
+        return ResponseEntity.ok(true);
     }
 
     @Override
