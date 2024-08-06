@@ -9,6 +9,7 @@ import com.readyup.api.response.CreatePersonResponse;
 import com.readyup.api.response.GetFriendsResponse;
 import com.readyup.api.validator.Validator;
 import com.readyup.domain.Person;
+import com.readyup.domain.SearchedPerson;
 import com.readyup.manager.definitions.PersonManager;
 import com.readyup.security.jwt.JwtGenerator;
 import org.springframework.http.ResponseEntity;
@@ -99,8 +100,9 @@ public class PersonEndpoint implements PersonEndpointDefinition {
 
     @Override
     @PostMapping(value = "/searchUsername")
-    public ResponseEntity<List<Person>> searchUsername(SearchUsernameRequest request) {
-        List<Person> foundPeople = personManager.searchUsername(request.getUsername());
+    public ResponseEntity<List<SearchedPerson>> searchUsername(String bearerToken, SearchUsernameRequest request) {
+        String requesterUsername = jwtGenerator.getUsernameFromBearer(bearerToken);
+        List<SearchedPerson> foundPeople = personManager.searchUsername(requesterUsername, request.getUsername());
 
         return ResponseEntity.ok(foundPeople);
     }

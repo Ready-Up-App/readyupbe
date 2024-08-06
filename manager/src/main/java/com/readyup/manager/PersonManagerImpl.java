@@ -2,6 +2,7 @@ package com.readyup.manager;
 
 import com.readyup.domain.Friend;
 import com.readyup.domain.Person;
+import com.readyup.domain.SearchedPerson;
 import com.readyup.manager.definitions.PersonManager;
 import com.readyup.manager.mapper.FriendMapper;
 import com.readyup.manager.mapper.PersonMapper;
@@ -10,6 +11,10 @@ import com.readyup.ri.repository.PersonRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonManagerImpl implements PersonManager {
@@ -50,16 +55,37 @@ public class PersonManagerImpl implements PersonManager {
 
     @Override
     public List<Friend> getFriends(String username) {
-        List<PersonEntity> friends = personRepository.getFriends(username);
-        List<PersonEntity> pendingFriends = personRepository.getPendingFriends(username);
-        
+        CompletableFuture<List<PersonEntity>> friendsFuture = CompletableFuture.supplyAsync(() -> personRepository.getFriends(username));
+        CompletableFuture<List<PersonEntity>> pendingFriendsFuture = CompletableFuture.supplyAsync(() -> personRepository.getPendingFriends(username));
+
+        List<PersonEntity> friends = friendsFuture.join();
+        List<PersonEntity> pendingFriends = pendingFriendsFuture.join();
         return FriendMapper.map(friends, pendingFriends);
     }
 
     @Override
-    public List<Person> searchUsername(String username) {
-        return PersonMapper.INSTANCE.mapAllEntities(personRepository.searchUsername(username))
+    public List<SearchedPerson> searchUsername(String requesterUsername, String username) {
+        CompletableFuture<List<PersonEntity>> searchUsernameFuture = CompletableFuture
+                .supplyAsync(() -> personRepository.searchUsername(requesterUsername, username));
+
+        CompletableFuture<List<Friend>> friendsFuture = CompletableFuture
+                .supplyAsync(() -> getFriends(requesterUsername));
+
+        List<Person> foundPeople = PersonMapper.INSTANCE.mapAllEntities(searchUsernameFuture.join())
                 .stream().toList();
+
+        Map<String, Friend> friendsMap = friendsFuture.join().stream().collect(Collectors.toMap(Friend::getUsername,Function.identity()));
+
+        return foundPeople.parallelStream().map(person -> {
+            SearchedPerson sp = new SearchedPerson();
+            sp.setUsername(person.getUsername());
+            sp.setFirstname(person.getFirstname());
+
+            boolean isFriend = friendsMap.containsKey(person.getUsername());
+            sp.setAvailable(!isFriend);
+
+            return sp;
+        }).toList();
     }
 
     @Override

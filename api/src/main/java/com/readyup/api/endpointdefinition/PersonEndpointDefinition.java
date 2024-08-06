@@ -7,6 +7,7 @@ import com.readyup.api.request.SearchUsernameRequest;
 import com.readyup.api.response.CreatePersonResponse;
 import com.readyup.api.response.GetFriendsResponse;
 import com.readyup.domain.Person;
+import com.readyup.domain.SearchedPerson;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
@@ -41,6 +42,6 @@ public interface PersonEndpointDefinition {
     ResponseEntity<GetFriendsResponse> getFriends(@RequestHeader(name = "Authorization") String bearerToken);
 
     @ApiOperation(value = "Search for a username")
-    ResponseEntity<List<Person>> searchUsername(@RequestBody SearchUsernameRequest request);
+    ResponseEntity<List<SearchedPerson>> searchUsername(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody SearchUsernameRequest request);
 
 }

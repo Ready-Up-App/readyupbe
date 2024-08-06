@@ -3,7 +3,6 @@ package com.readyup.api.endpointdefinition;
 import com.readyup.api.request.AddToGroupRequest;
 import com.readyup.api.request.CreateGroupRequest;
 import com.readyup.api.response.GroupResponse;
-import com.readyup.api.request.GetGroupForRequest;
 import com.readyup.domain.Group;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +20,11 @@ import java.util.List;
 public interface GroupEndpointDefinition {
     
     @ApiOperation(value = "Create a new group, error if exists")
-    ResponseEntity<Boolean> create(@RequestBody CreateGroupRequest request);
+    ResponseEntity<Boolean> create(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody CreateGroupRequest request);
 
 
     @ApiOperation(value = "Get group, error or null if not exist")
-    ResponseEntity<GroupResponse> getGroupFor(@RequestBody GetGroupForRequest request);
+    ResponseEntity<GroupResponse> getGroupFor(@RequestHeader(name = "Authorization") String bearerToken);
 
     @ApiOperation(value = "Get all groups")
     ResponseEntity<List<Group>> getAllGroups();
@@ -34,6 +33,6 @@ public interface GroupEndpointDefinition {
     ResponseEntity<Group> addToGroup(@RequestBody AddToGroupRequest request);
 
     @ApiOperation(value = "Get joinable groups")
-    ResponseEntity<List<Group>> getJoinableGroups(@RequestHeader(name = "Authorization", required = true) String bearerToken);
+    ResponseEntity<List<Group>> getJoinableGroups(@RequestHeader(name = "Authorization") String bearerToken);
 
 }

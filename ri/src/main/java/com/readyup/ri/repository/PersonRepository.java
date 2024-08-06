@@ -79,8 +79,8 @@ public class PersonRepository {
         return personRepositoryJpa.findPendingFriends(username);
     }
 
-    public List<PersonEntity> searchUsername(String username) {
-        return personRepositoryJpa.searchUsername(String.format("(?i).*%s.*", username));
+    public List<PersonEntity> searchUsername(String requesterUsername, String username) {
+        return personRepositoryJpa.searchUsername(requesterUsername, String.format("(?i).*%s.*", username));
     }
 
     public void respondFriendRequest(String username, String otherUsername, Boolean accept) {

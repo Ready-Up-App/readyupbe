@@ -1,7 +1,6 @@
 package com.readyup.api.validator;
 
 import com.readyup.api.request.CreatePersonRequest;
-import com.readyup.api.request.GetGroupForRequest;
 
 import java.util.regex.Pattern;
 
