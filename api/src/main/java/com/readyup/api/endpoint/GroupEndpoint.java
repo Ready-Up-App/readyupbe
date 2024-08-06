@@ -3,16 +3,12 @@ package com.readyup.api.endpoint;
 import com.readyup.api.request.AddToGroupRequest;
 import com.readyup.api.request.CreateGroupRequest;
 import com.readyup.api.response.GroupResponse;
-import com.readyup.api.request.GetGroupForRequest;
 import com.readyup.domain.Group;
 import com.readyup.domain.Person;
-import com.readyup.manager.definitions.AuthManager;
 import com.readyup.manager.definitions.GroupManager;
 
 import com.readyup.security.jwt.JwtGenerator;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.readyup.api.endpointdefinition.GroupEndpointDefinition;
@@ -33,16 +29,18 @@ public class GroupEndpoint implements GroupEndpointDefinition {
 
     @Override
     @PostMapping(value = "/create")
-    public ResponseEntity<Boolean> create(CreateGroupRequest request) {
-        Boolean response = groupManager.create(request.getGroup(), request.getRequesterUsername());
+    public ResponseEntity<Boolean> create(String bearerToken, CreateGroupRequest request) {
+        String username = jwtGenerator.getUsernameFromBearer(bearerToken);
+        Boolean response = groupManager.create(request.getGroup(), username);
         return ResponseEntity.ok(response);
     }
 
     @Override
     @PostMapping(value = "/getGroupFor")
-    public ResponseEntity<GroupResponse> getGroupFor(GetGroupForRequest request) {
+    public ResponseEntity<GroupResponse> getGroupFor(String bearerToken) {
+        String username = jwtGenerator.getUsernameFromBearer(bearerToken);
         Person person = new Person();
-        person.setUsername(request.getUsername());
+        person.setUsername(username);
 
         Group response = groupManager.getGroupFor(person);
         return ResponseEntity.ok(new GroupResponse(response));
