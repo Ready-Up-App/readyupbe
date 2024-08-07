@@ -91,4 +91,8 @@ public class PersonRepository {
             personRepositoryJpa.rejectFriendRequest(username, otherUsername);
         }
     }
+
+    public List<PersonEntity> getPendingAndActiveFriends(String username) {
+        return personRepositoryJpa.getPendingAndActiveFriends(username);
+    }
 }
