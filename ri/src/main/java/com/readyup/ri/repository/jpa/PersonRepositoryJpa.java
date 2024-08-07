@@ -48,4 +48,9 @@ public interface PersonRepositoryJpa extends Neo4jRepository<PersonEntity, Long>
             "AND rel.accepted = false " +
             "DELETE rel")
     void rejectFriendRequest(String username, String other);
+
+    @Query("MATCH (p:Person)-[rel:FRIENDS_WITH]-(friend:Person) " +
+            "WHERE p.username = $username " +
+            "RETURN friend ")
+    List<PersonEntity> getPendingAndActiveFriends(String username);
 }

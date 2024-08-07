@@ -68,13 +68,13 @@ public class PersonManagerImpl implements PersonManager {
         CompletableFuture<List<PersonEntity>> searchUsernameFuture = CompletableFuture
                 .supplyAsync(() -> personRepository.searchUsername(requesterUsername, username));
 
-        CompletableFuture<List<Friend>> friendsFuture = CompletableFuture
-                .supplyAsync(() -> getFriends(requesterUsername));
+        CompletableFuture<List<Friend>> allFriendsFuture = CompletableFuture
+                .supplyAsync(() -> getPendingAndActiveFriends(requesterUsername));
 
         List<Person> foundPeople = PersonMapper.INSTANCE.mapAllEntities(searchUsernameFuture.join())
                 .stream().toList();
 
-        Map<String, Friend> friendsMap = friendsFuture.join().stream().collect(Collectors.toMap(Friend::getUsername,Function.identity()));
+        Map<String, Friend> friendsMap = allFriendsFuture.join().stream().collect(Collectors.toMap(Friend::getUsername,Function.identity()));
 
         return foundPeople.parallelStream().map(person -> {
             SearchedPerson sp = new SearchedPerson();
@@ -93,5 +93,9 @@ public class PersonManagerImpl implements PersonManager {
         personRepository.respondFriendRequest(username, otherUsername, accept);
     }
 
+    //gets all friends, and all outgoing+incoming pending requests
+    public List<Friend> getPendingAndActiveFriends(String username) {
+        return FriendMapper.map(personRepository.getPendingAndActiveFriends(username));
+    }
 
 }

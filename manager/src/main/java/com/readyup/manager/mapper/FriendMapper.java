@@ -11,27 +11,43 @@ import java.util.List;
 public class FriendMapper {
 
     public static List<Friend> map(List<PersonEntity> friends, List<PersonEntity> pendingFriends) {
-        List<Friend> mFriends = friends.stream().map(p -> {
-            Friend f = new Friend();
-            f.setAccepted(true);
-            f.setFirstName(p.getFirstname());
-            f.setUsername(p.getUsername());
-            return f;
-        }).toList();
+        List<Friend> mFriends = friends
+                .stream()
+                .map(p -> {
+                    Friend f = new Friend();
+                    f.setAccepted(true);
+                    f.setFirstName(p.getFirstname());
+                    f.setUsername(p.getUsername());
+                    return f;
+                }).toList();
 
-        List<Friend> pFriends = pendingFriends.stream().map(p -> {
-            Friend f = new Friend();
-            f.setAccepted(false);
-            f.setFirstName(p.getFirstname());
-            f.setUsername(p.getUsername());
-            return f;
-        }).toList();
+        List<Friend> pFriends = pendingFriends
+                .stream()
+                .map(p -> {
+                    Friend f = new Friend();
+                    f.setAccepted(false);
+                    f.setFirstName(p.getFirstname());
+                    f.setUsername(p.getUsername());
+                    return f;
+                }).toList();
 
         List<Friend> allFriends = new ArrayList<>(pFriends.size() + mFriends.size());
         allFriends.addAll(pFriends);
         allFriends.addAll(mFriends);
 
         return allFriends;
+    }
+
+    public static List<Friend> map(List<PersonEntity> allFriends) {
+        return allFriends
+                .stream()
+                .map(p -> {
+                    Friend f = new Friend();
+                    f.setAccepted(true);
+                    f.setFirstName(p.getFirstname());
+                    f.setUsername(p.getUsername());
+                    return f;
+                }).toList();
     }
 
     private static List<Friend> mapIncomingFriends(List<PersonEntity> friends) {
