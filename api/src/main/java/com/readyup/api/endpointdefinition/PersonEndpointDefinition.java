@@ -26,10 +26,6 @@ public interface PersonEndpointDefinition {
     @ApiOperation(value = "Get all people in the DB")
     ResponseEntity<List<Person>> getAll();
 
-    //NO AUTH
-    @ApiOperation(value = "Create a person if they do not already exist")
-    ResponseEntity<CreatePersonResponse> createPerson(@RequestBody CreatePersonRequest request);
-
     //AUTH on fromUsername user
     @ApiOperation(value = "Send a friend request to an account's username")
     ResponseEntity friendRequest(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody FriendRequest request);

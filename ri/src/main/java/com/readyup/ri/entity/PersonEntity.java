@@ -22,8 +22,6 @@ public class PersonEntity {
     private String password;
     @Property("firstname")
     private String firstname;
-    @Property("lastname")
-    private String lastname;
     @Property("email")
     private String email;
     @Property("createDtm")
@@ -31,8 +29,6 @@ public class PersonEntity {
 
     @Relationship(type = "FRIENDS_WITH", direction = Relationship.Direction.OUTGOING)
     private List<FriendWith> friendsList;
-//    @Relationship(type = "MEMBER_OF", direction = Relationship.Direction.OUTGOING)
-//    private GroupEntity group;
 
     public PersonEntity() {}
 

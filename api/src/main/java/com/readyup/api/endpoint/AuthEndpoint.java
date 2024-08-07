@@ -44,7 +44,6 @@ public class AuthEndpoint implements AuthEndpointDefinition {
                 .password(request.getPassword())
                 .email(request.getEmail())
                 .firstname(request.getFirstname())
-                .lastname(request.getLastname())
                     .build();
         authManager.createUser(newPerson);
         SignUpResponse response =  new SignUpResponse();
