@@ -25,9 +25,10 @@ public interface GroupRepositoryJpa extends Neo4jRepository<GroupEntity, Long> {
             "RETURN g")
     Optional<GroupEntity> addPersonToGroup(String groupUid, String username);
 
-    @Query("MATCH (user:Person)-[:FRIENDS_WITH]-(other:Person)-[:MEMBER_OF]->(g:Group) " +
+    @Query("MATCH (user:Person)-[rel:FRIENDS_WITH]-(other:Person)-[:MEMBER_OF]->(g:Group) " +
             "WHERE user.username = $username " +
-            "RETURN g")
+            "AND rel.accepted = TRUE " +
+            "RETURN g ")
     List<GroupEntity> findAllJoinableGroupsByUsername(String username);
 
 
