@@ -19,6 +19,7 @@ public interface PersonMapper {
     @Mapping(target = "createDtm", defaultExpression = "java(java.time.LocalDateTime.now())")
     PersonEntity map(Person person);
 
+    @Mapping(target = "password", ignore = true)
     Person map(PersonEntity personEntity);
 
     Collection<Person> mapAllEntities(Collection<PersonEntity> entities);

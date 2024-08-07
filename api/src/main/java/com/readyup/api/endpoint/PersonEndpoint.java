@@ -38,29 +38,6 @@ public class PersonEndpoint implements PersonEndpointDefinition {
         return ResponseEntity.ok(personManager.getAllPeople());
     }
 
-    @Override
-    @PostMapping(value = "/create")
-    public ResponseEntity<CreatePersonResponse> createPerson(CreatePersonRequest request) {
-        CreatePersonResponse response = new CreatePersonResponse();
-
-        //Validate request
-        Boolean validRequest = Validator.validate(request);
-        if (!validRequest) {
-            response.setFailReason("Invalid Email");
-            return ResponseEntity.badRequest().body(response);
-        }
-
-        Person personToCreate = Person.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .username(request.getUsername())
-                .email(request.getEmail())
-                    .build();
-
-        response.setCreatedPerson(personManager.createPerson(personToCreate));
-
-        return ResponseEntity.ok(response);
-    }
 
     @Override
     @PostMapping(value = "/friendRequest")
