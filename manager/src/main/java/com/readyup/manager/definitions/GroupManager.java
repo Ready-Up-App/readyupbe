@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface GroupManager {
 
-    boolean create(Group group, String requesterUsername);
-    Group getGroupFor(Person person);
+    boolean create(String requesterUsername, Group group);
+    Group getGroupFor(String username);
     boolean update(Group group);
     boolean delete(Group group);
     List<Group> getAllGroups();

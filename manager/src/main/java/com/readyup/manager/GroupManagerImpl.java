@@ -13,9 +13,8 @@ import com.readyup.ri.repository.PersonRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class GroupManagerImpl implements GroupManager {
@@ -29,26 +28,15 @@ public class GroupManagerImpl implements GroupManager {
     }
 
     @Override
-    public boolean create(Group group, String requesterUsername) {
-        Person owner = personManager.getPerson(requesterUsername);
+    public boolean create(String ownerUsername, Group group) {
 
-        if (owner == null) {
-            return false;
-        }
-
-        PersonEntity ownerEntity = PersonMapper.INSTANCE.map(owner);
-        GroupEntity newGroup = GroupMapper.INSTANCE.map(group);
-
-        newGroup.addGroupMember(ownerEntity);
-        groupRepository.create(newGroup);
-        return true;
+        return groupRepository.create(ownerUsername, group.getProps()) != null;
     }
 
     @Override
-    public Group getGroupFor(Person person) {
-//        GroupEntity foundGroup = groupRepository.getGroupFor(personMapper.domainToEntity(person));
-//        return groupMapper.entityToDomain(foundGroup);
-        return null;
+    public Group getGroupFor(String username) {
+        Optional<GroupEntity> foundGroup = groupRepository.getGroupFor(username);
+        return foundGroup.map(GroupMapper.INSTANCE::map).orElse(null);
     }
 
     @Override

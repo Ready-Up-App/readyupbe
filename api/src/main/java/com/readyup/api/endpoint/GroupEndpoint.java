@@ -31,7 +31,7 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     @PostMapping(value = "/create")
     public ResponseEntity<Boolean> create(String bearerToken, CreateGroupRequest request) {
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
-        Boolean response = groupManager.create(request.getGroup(), username);
+        Boolean response = groupManager.create(username, request.getGroup());
         return ResponseEntity.ok(response);
     }
 
@@ -39,10 +39,8 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     @PostMapping(value = "/getGroupFor")
     public ResponseEntity<GroupResponse> getGroupFor(String bearerToken) {
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
-        Person person = new Person();
-        person.setUsername(username);
 
-        Group response = groupManager.getGroupFor(person);
+        Group response = groupManager.getGroupFor(username);
         return ResponseEntity.ok(new GroupResponse(response));
     }
 

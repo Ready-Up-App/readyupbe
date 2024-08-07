@@ -5,6 +5,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface GroupRepositoryJpa extends Neo4jRepository<GroupEntity, Long> {
@@ -28,4 +29,12 @@ public interface GroupRepositoryJpa extends Neo4jRepository<GroupEntity, Long> {
             "WHERE user.username = $username " +
             "RETURN g")
     List<GroupEntity> findAllJoinableGroupsByUsername(String username);
+
+
+    @Query("MATCH (u:Person) " +
+            "WHERE u.username = $ownerUsername " +
+            "CREATE (u)-[rel:MEMBER_OF {owner: TRUE}]->(newGroup:Group $groupProps) " +
+            "SET rel.owner = TRUE " +
+            "RETURN newGroup ")
+    GroupEntity createGroup(String ownerUsername, Map<String, Object> groupProps);
 }
