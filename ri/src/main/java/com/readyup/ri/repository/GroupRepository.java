@@ -6,7 +6,9 @@ import com.readyup.ri.entity.PersonEntity;
 import com.readyup.ri.repository.jpa.GroupRepositoryJpa;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -19,13 +21,15 @@ public class GroupRepository {
     }
 
 
-    public GroupEntity create(GroupEntity groupEntity) {
-        Optional<GroupEntity> foundGroup = groupRepositoryJpa.findByName(groupEntity.getName());
-        if (foundGroup.isPresent()) {
-            //group exists and should not be created
+    //If user is in a group, do not create a new one.
+    public GroupEntity create(String ownerUsername, Map<String, Object> groupProps) {
+        try {
+            return getGroupFor(ownerUsername).isPresent() ? null : groupRepositoryJpa.createGroup(ownerUsername, groupProps);
+
+        } catch (Exception e) {
+            System.out.print(e.getMessage());
             return null;
         }
-        return groupRepositoryJpa.save(groupEntity);
     }
 
     public GroupEntity update(GroupEntity groupEntity) {
