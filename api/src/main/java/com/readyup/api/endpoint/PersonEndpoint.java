@@ -11,17 +11,17 @@ import com.readyup.api.validator.Validator;
 import com.readyup.domain.Person;
 import com.readyup.domain.SearchedPerson;
 import com.readyup.manager.definitions.PersonManager;
+import com.readyup.manager.definitions.PushNotificationManager;
 import com.readyup.security.jwt.JwtGenerator;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping(path = "/api/person")
+@CrossOrigin
 public class PersonEndpoint implements PersonEndpointDefinition {
 
     private final JwtGenerator jwtGenerator;
@@ -41,14 +41,15 @@ public class PersonEndpoint implements PersonEndpointDefinition {
 
     @Override
     @PostMapping(value = "/friendRequest")
-    public ResponseEntity friendRequest(String bearerToken, FriendRequest request) {
+    public ResponseEntity<Boolean> friendRequest(String bearerToken, FriendRequest request) {
 
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
         if (username.equals(request.getToUsername())) {
             return ResponseEntity.badRequest().build();
         }
-        personManager.friendRequest(username, request.getToUsername());
-        return ResponseEntity.ok().build();
+        Boolean requestSent = personManager.friendRequest(username, request.getToUsername());
+
+        return requestSent ? ResponseEntity.ok(true) : ResponseEntity.unprocessableEntity().body(false);
     }
 
     @Override

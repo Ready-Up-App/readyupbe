@@ -13,7 +13,7 @@ public interface PersonManager {
     List<Person> getAllPeople();
     Person getPerson(String username);
     Person createPerson(Person person);
-    void friendRequest(String fromUsername, String toUsername);
+    Boolean friendRequest(String fromUsername, String toUsername);
     Boolean personExists(String username);
     List<Friend> getFriends(String username);
     List<SearchedPerson> searchUsername(String requesterUsername, String username);

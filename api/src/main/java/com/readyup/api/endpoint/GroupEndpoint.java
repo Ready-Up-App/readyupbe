@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/groups")
+@CrossOrigin
 public class GroupEndpoint implements GroupEndpointDefinition {
 
     private final JwtGenerator jwtGenerator;

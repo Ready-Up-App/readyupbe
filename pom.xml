@@ -19,6 +19,21 @@
 	<packaging>pom</packaging>
 	<name>readyup-pom</name>
 
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.github.nia-medtech</groupId>
+			<artifactId>expo-server-sdk-java</artifactId>
+			<version>2.0.8</version>
+		</dependency>
+	</dependencies>
+
 	<modules>
 		<module>api</module>
 		<module>jar</module>
