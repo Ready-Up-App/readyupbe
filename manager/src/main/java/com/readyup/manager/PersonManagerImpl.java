@@ -4,6 +4,7 @@ import com.readyup.domain.Friend;
 import com.readyup.domain.Person;
 import com.readyup.domain.SearchedPerson;
 import com.readyup.manager.definitions.PersonManager;
+import com.readyup.manager.definitions.PushNotificationManager;
 import com.readyup.manager.mapper.FriendMapper;
 import com.readyup.manager.mapper.PersonMapper;
 import com.readyup.ri.entity.PersonEntity;
@@ -19,11 +20,14 @@ import java.util.stream.Collectors;
 @Service
 public class PersonManagerImpl implements PersonManager {
 
+    private static final String FRIEND_REQUEST_PUSH_NOTIF_MSG = "Friend request from %s";
 
     private final PersonRepository personRepository;
+    private final PushNotificationManager pushNotificationManager;
 
-    public PersonManagerImpl(PersonRepository personRepository) {
+    public PersonManagerImpl(PersonRepository personRepository, PushNotificationManager pushNotificationManager) {
         this.personRepository = personRepository;
+        this.pushNotificationManager = pushNotificationManager;
     }
 
     @Override
@@ -44,8 +48,13 @@ public class PersonManagerImpl implements PersonManager {
     }
 
     @Override
-    public void friendRequest(String fromUsername, String toUsername) {
-        personRepository.friendRequest(fromUsername, toUsername);
+    public Boolean friendRequest(String fromUsername, String toUsername) {
+        Boolean requestSent = personRepository.friendRequest(fromUsername, toUsername);
+
+        if (requestSent) {
+            CompletableFuture.runAsync(() -> pushNotificationManager.sendPushNotification(toUsername, String.format(FRIEND_REQUEST_PUSH_NOTIF_MSG, fromUsername) ));
+        }
+        return requestSent;
     }
 
     @Override
