@@ -42,9 +42,8 @@ public class PersonEndpoint implements PersonEndpointDefinition {
     @Override
     @PostMapping(value = "/friendRequest")
     public ResponseEntity<Boolean> friendRequest(String bearerToken, FriendRequest request) {
-
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
-        if (username.equals(request.getToUsername())) {
+        if (request.getToUsername() == null || username.equals(request.getToUsername())) {
             return ResponseEntity.badRequest().build();
         }
         Boolean requestSent = personManager.friendRequest(username, request.getToUsername());
