@@ -50,9 +50,9 @@ public class WebSecurityConfig{
                     authorize.anyRequest().authenticated();
                 })
                 .sessionManagement(session ->
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

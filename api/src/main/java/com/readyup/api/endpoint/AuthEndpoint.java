@@ -1,8 +1,10 @@
 package com.readyup.api.endpoint;
 
 import com.readyup.api.endpointdefinition.AuthEndpointDefinition;
+import com.readyup.api.request.RefreshTokenRequest;
 import com.readyup.api.request.SignInRequest;
 import com.readyup.api.request.SignUpRequest;
+import com.readyup.api.response.RefreshTokenResponse;
 import com.readyup.api.response.SignInResponse;
 import com.readyup.api.response.SignUpResponse;
 import com.readyup.domain.Person;
@@ -14,10 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -58,6 +57,11 @@ public class AuthEndpoint implements AuthEndpointDefinition {
         return new ResponseEntity<>(new SignInResponse(token), HttpStatus.OK);
     }
 
+    @Override
+    @GetMapping("/getTokenHealth")
+    public ResponseEntity<Boolean> getTokenHealth(String bearerToken) {
+        return ResponseEntity.ok(jwtGenerator.validateToken(bearerToken));
+    }
 
     private String authenticate(String username, String password) {
         Authentication authentication = authManager.getAuthenticationManager()
