@@ -80,7 +80,13 @@ public class PersonRepository {
     }
 
     public List<PersonEntity> searchUsername(String requesterUsername, String username) {
-        return personRepositoryJpa.searchUsername(requesterUsername, String.format("(?i).*%s.*", username));
+        //Remove all non-alphanumeric characters
+        username = username.replaceAll("\\W", "");
+
+        if (username.isEmpty()) {
+            throw new RuntimeException("Empty string!");
+        }
+        return personRepositoryJpa.searchUsername(requesterUsername, String.format("(?i)%s.*", username));
     }
 
     public void respondFriendRequest(String username, String otherUsername, Boolean accept) {

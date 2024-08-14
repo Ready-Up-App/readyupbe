@@ -7,8 +7,10 @@ import com.readyup.api.request.SignUpRequest;
 import com.readyup.api.response.RefreshTokenResponse;
 import com.readyup.api.response.SignInResponse;
 import com.readyup.api.response.SignUpResponse;
+import com.readyup.api.validator.Validator;
 import com.readyup.domain.Person;
 import com.readyup.manager.definitions.AuthManager;
+import com.readyup.manager.util.StringUtil;
 import com.readyup.security.jwt.JwtGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +37,9 @@ public class AuthEndpoint implements AuthEndpointDefinition {
     @Override
     @PostMapping("/signUp")
     public ResponseEntity<SignUpResponse> signUp(SignUpRequest request) {
+        if (!Validator.validUsername(request.getUsername())) {
+            return ResponseEntity.badRequest().build();
+        }
         if (authManager.existsByUsername(request.getUsername())) {
             return new ResponseEntity<>(new SignUpResponse("That username is taken!"), HttpStatus.BAD_REQUEST);
         }
