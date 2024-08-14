@@ -79,8 +79,12 @@ public class PersonEndpoint implements PersonEndpointDefinition {
     @PostMapping(value = "/searchUsername")
     public ResponseEntity<List<SearchedPerson>> searchUsername(String bearerToken, SearchUsernameRequest request) {
         String requesterUsername = jwtGenerator.getUsernameFromBearer(bearerToken);
-        List<SearchedPerson> foundPeople = personManager.searchUsername(requesterUsername, request.getUsername());
-
+        List<SearchedPerson> foundPeople;
+        try {
+            foundPeople = personManager.searchUsername(requesterUsername, request.getUsername());
+        } catch (RuntimeException e) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
         return ResponseEntity.ok(foundPeople);
     }
 

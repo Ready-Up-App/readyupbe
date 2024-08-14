@@ -35,7 +35,7 @@ public interface PersonRepositoryJpa extends Neo4jRepository<PersonEntity, Long>
             "WHERE u.username =~ $username " +
             "AND u.username <> $requesterUsername "+
             "RETURN u ")
-    List<PersonEntity> searchUsername(String requesterUsername, String username);
+    List<PersonEntity>  searchUsername(String requesterUsername, String username);
 
     @Query("MATCH (p:Person)<-[rel:FRIENDS_WITH]-(o:Person) " +
             "WHERE p.username = $username AND o.username = $other " +

@@ -1,6 +1,8 @@
 package com.readyup.api.validator;
 
 import com.readyup.api.request.CreatePersonRequest;
+import com.readyup.manager.util.StringUtil;
+import org.springframework.http.ResponseEntity;
 
 import java.util.regex.Pattern;
 
@@ -15,13 +17,14 @@ public class Validator {
         return true;
     }
 
-//    public static Boolean validate(GetGroupForRequest request) {
-//
-//    }
-
     public static Boolean validEmail(String email) {
         return Pattern.compile(emailRegexPattern)
                 .matcher(email)
                 .matches();
+    }
+
+    public static Boolean validUsername(String username) {
+        String nonAlphaUsername = StringUtil.removeNonAlphaNumeric(username);
+        return nonAlphaUsername.equals(username);
     }
 }
