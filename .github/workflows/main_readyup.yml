@@ -19,18 +19,17 @@ jobs:
       - name: Set up Java version
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: 'java21'
           distribution: 'microsoft'
 
       - name: Build with Maven
-        run: mvn clean package --file pom.xml
-
+        run: mvn clean install
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: '${{ github.workspace }}/jar/target/*.jar'
+          path: '${{ github.workspace }}/target/*.jar'
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,9 +49,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4C76B179E3B84FFC85CD64A11EE341B9 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_602FF786901C43D28C019A508F63B9FE }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0DBB80BC5ADC4A168D51A3D9AA33E3BD }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_53195308CCED401AB799C61FCD7330CF }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9AF0CB41C98D40F099EA64E04AE9B665 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_1AA0FBD99FD545B6BDDBCADACD36F3F2 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
