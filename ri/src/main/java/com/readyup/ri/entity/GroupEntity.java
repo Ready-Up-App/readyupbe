@@ -16,7 +16,7 @@ public class GroupEntity {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private String id;
 
     @Property("name")
     private String name;

@@ -6,7 +6,6 @@ import com.readyup.ri.entity.PersonEntity;
 import com.readyup.ri.repository.jpa.GroupRepositoryJpa;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,7 +35,7 @@ public class GroupRepository {
         Optional<GroupEntity> foundGroup = groupRepositoryJpa.findByName(groupEntity.getName());
 
         if (foundGroup.isPresent()) {
-            groupEntity.setId(foundGroup.get().getId());
+//            groupEntity.setId(foundGroup.get().getId());
             //group exists and should update
             return groupRepositoryJpa.save(groupEntity);
         }
@@ -47,29 +46,26 @@ public class GroupRepository {
         return groupRepositoryJpa.findByAttendee(username);
     }
 
-    public Boolean delete(GroupEntity groupEntity) {
-        Optional<GroupEntity> foundGroup = groupRepositoryJpa.findByName(groupEntity.getName());
-        if (foundGroup.isPresent()) {
-            groupRepositoryJpa.deleteById(foundGroup.get().getId());
-            return true;
-        }
-        return false;
+    public Boolean delete(String username) {
+        return groupRepositoryJpa.delete(username) == null;
     }
 
     public List<GroupEntity> getAllGroups() {
         return groupRepositoryJpa.findAll();
     }
 
-    public Optional<GroupEntity> getGroup(String groupUid) {
-        return groupRepositoryJpa.findByName(groupUid);
+    public Optional<GroupEntity> getGroup(String id) {
+        return groupRepositoryJpa.findById(id);
     }
 
-    public Optional<GroupEntity> addPersonToGroup(String groupUid, String username) {
-        return groupRepositoryJpa.addPersonToGroup(groupUid, username);
+    public Optional<GroupEntity> addPersonToGroup(String username, String groupId) {
+        return groupRepositoryJpa.addPersonToGroup(username, groupId);
     }
 
     public List<GroupEntity> getJoinableGroups(String username) {
         List<GroupEntity> ge = groupRepositoryJpa.findAllJoinableGroupsByUsername(username);
         return ge;
     }
+
+
 }
