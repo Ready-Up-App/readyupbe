@@ -1,7 +1,7 @@
 package com.readyup.api.endpoint;
 
-import com.readyup.api.request.AddToGroupRequest;
 import com.readyup.api.request.CreateGroupRequest;
+import com.readyup.api.request.JoinGroupRequest;
 import com.readyup.api.response.GroupResponse;
 import com.readyup.domain.Group;
 import com.readyup.domain.Person;
@@ -37,6 +37,17 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     }
 
     @Override
+    @GetMapping(value = "/delete")
+    public ResponseEntity<Boolean> delete(String bearerToken) {
+        String username = jwtGenerator.getUsernameFromBearer(bearerToken);
+        if (!groupManager.delete(username)) {
+            return ResponseEntity.unprocessableEntity().body(false);
+        }
+
+        return ResponseEntity.ok(true);
+    }
+
+    @Override
     @PostMapping(value = "/getGroupFor")
     public ResponseEntity<GroupResponse> getGroupFor(String bearerToken) {
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
@@ -52,9 +63,11 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     }
 
     @Override
-    @PostMapping(value = "/addToGroup")
-    public ResponseEntity<Group> addToGroup(AddToGroupRequest request) {
-        groupManager.addMember(request.getUsername(), request.getGroupUid());
+    @PostMapping(value = "/joinGroup")
+    public ResponseEntity<Group> joinGroup(String bearerToken, JoinGroupRequest request) {
+        String username = jwtGenerator.getUsernameFromBearer(bearerToken);
+
+        groupManager.addMember(username, request.getGroupId());
         return ResponseEntity.ok().build();
     }
 

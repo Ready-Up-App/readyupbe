@@ -1,7 +1,7 @@
 package com.readyup.api.endpointdefinition;
 
-import com.readyup.api.request.AddToGroupRequest;
 import com.readyup.api.request.CreateGroupRequest;
+import com.readyup.api.request.JoinGroupRequest;
 import com.readyup.api.response.GroupResponse;
 import com.readyup.domain.Group;
 import org.springframework.http.MediaType;
@@ -18,10 +18,12 @@ import java.util.List;
     consumes = MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE)
 public interface GroupEndpointDefinition {
-    
+
     @ApiOperation(value = "Create a new group, error if exists")
     ResponseEntity<Boolean> create(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody CreateGroupRequest request);
 
+    @ApiOperation(value = "Delete users group, error if exists")
+    ResponseEntity<Boolean> delete(@RequestHeader(name = "Authorization")String bearerToken);
 
     @ApiOperation(value = "Get group, error or null if not exist")
     ResponseEntity<GroupResponse> getGroupFor(@RequestHeader(name = "Authorization") String bearerToken);
@@ -30,7 +32,7 @@ public interface GroupEndpointDefinition {
     ResponseEntity<List<Group>> getAllGroups();
 
     @ApiOperation(value = "Add a user to an existing group")
-    ResponseEntity<Group> addToGroup(@RequestBody AddToGroupRequest request);
+    ResponseEntity<Group> joinGroup(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody JoinGroupRequest request);
 
     @ApiOperation(value = "Get joinable groups")
     ResponseEntity<List<Group>> getJoinableGroups(@RequestHeader(name = "Authorization") String bearerToken);

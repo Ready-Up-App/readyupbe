@@ -8,12 +8,12 @@ import java.util.List;
 public interface GroupManager {
 
     boolean create(String requesterUsername, Group group);
-    Group getGroupFor(String username);
+    boolean delete(String username);
     boolean update(Group group);
-    boolean delete(Group group);
+    Group getGroupFor(String username);
     List<Group> getAllGroups();
 
-    void addMember(String username, String groupUid);
+    void addMember(String username, String id);
 
     List<Group> getJoinableGroups(String username);
 }

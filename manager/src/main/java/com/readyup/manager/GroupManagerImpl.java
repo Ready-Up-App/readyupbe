@@ -29,8 +29,12 @@ public class GroupManagerImpl implements GroupManager {
 
     @Override
     public boolean create(String ownerUsername, Group group) {
-
         return groupRepository.create(ownerUsername, group.getProps()) != null;
+    }
+
+    @Override
+    public boolean delete(String username) {
+        return groupRepository.delete(username);
     }
 
     @Override
@@ -45,17 +49,9 @@ public class GroupManagerImpl implements GroupManager {
     }
 
     @Override
-    public void addMember(String username, String groupUid) {
-        Optional<GroupEntity> foundGroupEntity = groupRepository.getGroup(groupUid);
+    public void addMember(String username, String groupId) {
 
-//        groupRepository.addPersonToGroup(groupUid, username);
-
-        if (foundGroupEntity.isPresent()) {
-            GroupEntity entity = foundGroupEntity.get();
-            PersonEntity personToAdd = PersonMapper.INSTANCE.map(personManager.getPerson(username));
-            entity.addGroupMember(personToAdd);
-            groupRepository.update(entity);
-        }
+        groupRepository.addPersonToGroup(username, groupId);
     }
 
     @Override
@@ -67,11 +63,6 @@ public class GroupManagerImpl implements GroupManager {
     @Override
     public boolean update(Group group) {
         return groupRepository.update(GroupMapper.INSTANCE.map(group)) != null;
-    }
-
-    @Override
-    public boolean delete(Group group) {
-        return groupRepository.delete(GroupMapper.INSTANCE.map(group)) == null;
     }
 
 }

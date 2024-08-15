@@ -17,7 +17,7 @@ import java.util.Set;
 @Setter
 public class Group {
 
-    private Long id;
+    private String id;
     private String name;
     private LocalDateTime createDtm;
     private String description;
