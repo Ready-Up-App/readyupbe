@@ -28,7 +28,10 @@ public class GroupEntity {
     private LocalDateTime createDtm;
 
     @Relationship(type = "MEMBER_OF", direction = Relationship.Direction.INCOMING)
-    private List<MemberOf> attendees;
+    private List<MemberOf> attendees = new ArrayList<>();
+
+    @Relationship(type = "STATUS", direction = Relationship.Direction.OUTGOING)
+    private ReadyStatusEntity readyStatus;
 
     public GroupEntity() {}
 

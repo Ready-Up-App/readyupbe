@@ -67,5 +67,13 @@ public class GroupRepository {
         return ge;
     }
 
+    public Boolean leaveGroup(String username) {
+        return groupRepositoryJpa.leaveGroup(username) != null;
 
+    }
+
+    public Boolean isOwnerOfGroup(String username) {
+        GroupEntity test = groupRepositoryJpa.getOwnedGroup(username);
+        return test != null;
+    }
 }

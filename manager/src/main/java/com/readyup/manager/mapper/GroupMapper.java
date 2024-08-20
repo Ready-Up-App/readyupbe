@@ -3,6 +3,7 @@ package com.readyup.manager.mapper;
 import com.readyup.domain.Group;
 import com.readyup.domain.Person;
 import com.readyup.ri.entity.GroupEntity;
+import com.readyup.ri.entity.ReadyStatusEntity;
 import com.readyup.ri.relationship.MemberOf;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,9 +19,11 @@ public interface GroupMapper {
     GroupMapper INSTANCE = Mappers.getMapper(GroupMapper.class);
 
     @Mapping(target = "createDtm", defaultExpression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "readyStatus", qualifiedByName = "mapReadyStatus")
     GroupEntity map(Group group);
 
     @Mapping(target = "attendees", qualifiedByName = "mapMembersToPersons")
+    @Mapping(target = "readyStatus", qualifiedByName = "mapReadyStatus")
     Group map(GroupEntity groupEntity);
 
     Collection<Group> mapAllEntities(Collection<GroupEntity> entities);
@@ -34,5 +37,16 @@ public interface GroupMapper {
                 }).toList();
     }
 
+    @Named("mapReadyStatus")
+    default Boolean mapReadyStatus(ReadyStatusEntity readyStatusEntity) {
 
+        return readyStatusEntity != null && readyStatusEntity.getStatus();
+    }
+
+    @Named("mapReadyStatus")
+    default ReadyStatusEntity mapReadyStatus(Boolean readyStatus) {
+        ReadyStatusEntity ret = new ReadyStatusEntity();
+        ret.setStatus(readyStatus);
+        return ret;
+    }
 }

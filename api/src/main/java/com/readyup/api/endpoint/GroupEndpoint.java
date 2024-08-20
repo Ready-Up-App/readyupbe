@@ -48,7 +48,7 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     }
 
     @Override
-    @PostMapping(value = "/getGroupFor")
+    @GetMapping(value = "/getGroupFor")
     public ResponseEntity<GroupResponse> getGroupFor(String bearerToken) {
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
 
@@ -80,5 +80,17 @@ public class GroupEndpoint implements GroupEndpointDefinition {
         return ResponseEntity.ok(groups);
     }
 
+    @Override
+    @GetMapping(value = "/leaveGroup")
+    public ResponseEntity<Boolean> leaveGroup(String bearerToken) {
+        String username = jwtGenerator.getUsernameFromBearer(bearerToken);
+        Boolean leftGroup;
+        try{
+            leftGroup = groupManager.leaveGroup(username);
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().body(false);
+        }
 
+        return ResponseEntity.ok(leftGroup);
+    }
 }
