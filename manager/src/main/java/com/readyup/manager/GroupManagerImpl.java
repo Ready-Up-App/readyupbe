@@ -61,6 +61,15 @@ public class GroupManagerImpl implements GroupManager {
     }
 
     @Override
+    public Boolean leaveGroup(String username) {
+        if(groupRepository.isOwnerOfGroup(username)) {
+            //cant leave a group, must delete it
+            throw new RuntimeException("Owner cannot leave a group, they must delete it");
+        }
+        return groupRepository.leaveGroup(username);
+    }
+
+    @Override
     public boolean update(Group group) {
         return groupRepository.update(GroupMapper.INSTANCE.map(group)) != null;
     }

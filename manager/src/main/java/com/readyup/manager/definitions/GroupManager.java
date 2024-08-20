@@ -16,4 +16,5 @@ public interface GroupManager {
     void addMember(String username, String id);
 
     List<Group> getJoinableGroups(String username);
+    Boolean leaveGroup(String username);
 }

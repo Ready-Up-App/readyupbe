@@ -37,4 +37,6 @@ public interface GroupEndpointDefinition {
     @ApiOperation(value = "Get joinable groups")
     ResponseEntity<List<Group>> getJoinableGroups(@RequestHeader(name = "Authorization") String bearerToken);
 
+    @ApiOperation(value = "Leave current group")
+    ResponseEntity<Boolean> leaveGroup(@RequestHeader(name = "Authorization") String bearerToken);
 }
