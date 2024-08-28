@@ -26,5 +26,7 @@ public class Person {
 
     @JsonIgnore
     private List<Person> friendsList;
+
+    private Boolean readyStatus;
 //    private Group group;
 }

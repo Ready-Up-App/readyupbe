@@ -1,11 +1,11 @@
 package com.readyup.api.endpointdefinition;
 
-import com.readyup.api.request.CreatePersonRequest;
 import com.readyup.api.request.FriendRequest;
 import com.readyup.api.request.RespondFriendRequest;
 import com.readyup.api.request.SearchUsernameRequest;
-import com.readyup.api.response.CreatePersonResponse;
+import com.readyup.api.request.SetReadyStatusRequest;
 import com.readyup.api.response.GetFriendsResponse;
+import com.readyup.api.response.SetReadyStatusResponse;
 import com.readyup.domain.Person;
 import com.readyup.domain.SearchedPerson;
 import io.swagger.annotations.Api;
@@ -33,11 +33,12 @@ public interface PersonEndpointDefinition {
     @ApiOperation(value = "Accept or reject a usernames friend request")
     ResponseEntity<Boolean> respondFriendRequest(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody RespondFriendRequest request);
 
-
-        @ApiOperation(value = "Get all friends in friends list")
+    @ApiOperation(value = "Get all friends in friends list")
     ResponseEntity<GetFriendsResponse> getFriends(@RequestHeader(name = "Authorization") String bearerToken);
 
     @ApiOperation(value = "Search for a username")
     ResponseEntity<List<SearchedPerson>> searchUsername(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody SearchUsernameRequest request);
 
+    @ApiOperation(value = "Ready up")
+    ResponseEntity<SetReadyStatusResponse> setReadyStatus(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody SetReadyStatusRequest request);
 }

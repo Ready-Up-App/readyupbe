@@ -68,8 +68,11 @@ public class GroupRepository {
     }
 
     public Boolean leaveGroup(String username) {
-        return groupRepositoryJpa.leaveGroup(username) != null;
-
+        GroupEntity leftGroup = groupRepositoryJpa.leaveGroup(username);
+        if (leftGroup != null) {
+            groupRepositoryJpa.setReady(leftGroup.getId(), false);
+        }
+        return leftGroup != null;
     }
 
     public Boolean isOwnerOfGroup(String username) {

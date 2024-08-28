@@ -18,4 +18,5 @@ public interface PersonManager {
     List<Friend> getFriends(String username);
     List<SearchedPerson> searchUsername(String requesterUsername, String username);
     void respondFriendRequest(String username, String otherUsername, Boolean accept);
+    Person setReadyStatus(String username, Boolean status);
 }
