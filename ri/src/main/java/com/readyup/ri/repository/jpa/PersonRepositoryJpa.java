@@ -35,7 +35,7 @@ public interface PersonRepositoryJpa extends Neo4jRepository<PersonEntity, Long>
             "WHERE u.username =~ $username " +
             "AND u.username <> $requesterUsername "+
             "RETURN u ")
-    List<PersonEntity>  searchUsername(String requesterUsername, String username);
+    List<PersonEntity> searchUsername(String requesterUsername, String username);
 
     @Query("MATCH (p:Person)<-[rel:FRIENDS_WITH]-(o:Person) " +
             "WHERE p.username = $username AND o.username = $other " +
@@ -53,4 +53,10 @@ public interface PersonRepositoryJpa extends Neo4jRepository<PersonEntity, Long>
             "WHERE p.username = $username " +
             "RETURN friend ")
     List<PersonEntity> getPendingAndActiveFriends(String username);
+
+    @Query("MATCH (p:Person)-[s:STATUS]->(rs:ReadyStatus) " +
+            "WHERE p.username = $username " +
+            "SET rs.status = $status " +
+            "RETURN p , collect(s), collect(rs)")
+    PersonEntity setReadyStatus(String username, Boolean status);
 }

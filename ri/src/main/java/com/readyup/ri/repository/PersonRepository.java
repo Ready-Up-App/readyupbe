@@ -101,4 +101,8 @@ public class PersonRepository {
     public List<PersonEntity> getPendingAndActiveFriends(String username) {
         return personRepositoryJpa.getPendingAndActiveFriends(username);
     }
+
+    public PersonEntity setReadyStatus(String username, Boolean status) {
+        return personRepositoryJpa.setReadyStatus(username, status);
+    }
 }

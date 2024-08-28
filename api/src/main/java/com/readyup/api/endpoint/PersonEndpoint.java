@@ -1,23 +1,20 @@
 package com.readyup.api.endpoint;
 
 import com.readyup.api.endpointdefinition.PersonEndpointDefinition;
-import com.readyup.api.request.CreatePersonRequest;
 import com.readyup.api.request.FriendRequest;
 import com.readyup.api.request.RespondFriendRequest;
 import com.readyup.api.request.SearchUsernameRequest;
-import com.readyup.api.response.CreatePersonResponse;
+import com.readyup.api.request.SetReadyStatusRequest;
 import com.readyup.api.response.GetFriendsResponse;
-import com.readyup.api.validator.Validator;
+import com.readyup.api.response.SetReadyStatusResponse;
 import com.readyup.domain.Person;
 import com.readyup.domain.SearchedPerson;
 import com.readyup.manager.definitions.PersonManager;
-import com.readyup.manager.definitions.PushNotificationManager;
 import com.readyup.security.jwt.JwtGenerator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping(path = "/api/person")
@@ -88,5 +85,14 @@ public class PersonEndpoint implements PersonEndpointDefinition {
         return ResponseEntity.ok(foundPeople);
     }
 
+    @Override
+    @PostMapping(value = "/setReadyStatus")
+    public ResponseEntity<SetReadyStatusResponse> setReadyStatus(String bearerToken, SetReadyStatusRequest request) {
+        String username = jwtGenerator.getUsernameFromBearer(bearerToken);
+
+        Person user = personManager.setReadyStatus(username, request.getStatus());
+//        return ResponseEntity.ok(username);
+        return ResponseEntity.ok(SetReadyStatusResponse.builder().user(user).build());
+    }
 
 }

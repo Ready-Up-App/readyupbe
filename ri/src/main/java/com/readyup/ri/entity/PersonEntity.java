@@ -30,6 +30,9 @@ public class PersonEntity {
     @Relationship(type = "FRIENDS_WITH", direction = Relationship.Direction.OUTGOING)
     private List<FriendWith> friendsList;
 
+    @Relationship(type = "STATUS", direction = Relationship.Direction.OUTGOING)
+    private ReadyStatusEntity readyStatus;
+
     public PersonEntity() {}
 
     public void requestFriend(PersonEntity person) {

@@ -32,15 +32,16 @@ public interface GroupMapper {
     @Named("mapMembersToPersons")
     default List<Person> mapMembersToPersons(List<MemberOf> members) {
         return members.stream()
-                .map((member) -> {
-                    return PersonMapper.INSTANCE.map(member.getAttendee());
-                }).toList();
+                .map((member) -> PersonMapper.INSTANCE.map(member.getAttendee())).toList();
     }
 
     @Named("mapReadyStatus")
     default Boolean mapReadyStatus(ReadyStatusEntity readyStatusEntity) {
+        if (readyStatusEntity == null) {
+            return null;
+        }
 
-        return readyStatusEntity != null && readyStatusEntity.getStatus();
+        return readyStatusEntity.getStatus();
     }
 
     @Named("mapReadyStatus")

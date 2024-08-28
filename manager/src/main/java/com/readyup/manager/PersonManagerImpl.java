@@ -102,6 +102,11 @@ public class PersonManagerImpl implements PersonManager {
         personRepository.respondFriendRequest(username, otherUsername, accept);
     }
 
+    @Override
+    public Person setReadyStatus(String username, Boolean status) {
+        return PersonMapper.INSTANCE.map(personRepository.setReadyStatus(username, status));
+    }
+
     //gets all friends, and all outgoing+incoming pending requests
     public List<Friend> getPendingAndActiveFriends(String username) {
         return FriendMapper.map(personRepository.getPendingAndActiveFriends(username));
