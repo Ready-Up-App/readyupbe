@@ -13,10 +13,6 @@
     <packaging>jar</packaging>
     <name>readyup-ri</name>
 
-    <properties>
-        <java.version>21</java.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
