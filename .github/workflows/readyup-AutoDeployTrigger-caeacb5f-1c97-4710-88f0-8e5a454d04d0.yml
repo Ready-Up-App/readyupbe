@@ -36,7 +36,6 @@ jobs:
         with:
           appSourcePath: ${{ github.workspace }}
           _dockerfilePathKey_: _dockerfilePath_
-          registryUrl: 
           registryUsername: ${{ secrets.READYUP_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.READYUP_REGISTRY_PASSWORD }}
           containerAppName: readyup
