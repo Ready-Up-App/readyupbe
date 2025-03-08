@@ -13,9 +13,6 @@
 	<packaging>jar</packaging>
 	<name>readyup-api</name>
 
-	<properties>
-		<java.version>21</java.version>
-	</properties>
     <dependencies>
 		<dependency>
             <groupId>org.springframework.plugin</groupId>
