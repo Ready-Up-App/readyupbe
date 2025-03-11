@@ -1,6 +1,6 @@
 package com.readyup.api.response;
 
-import com.readyup.domain.Person;
+import com.readyup.domain.User;
 import lombok.*;
 
 @Data
@@ -9,5 +9,5 @@ import lombok.*;
 @Builder
 public class SetReadyStatusResponse {
 
-    private Person user;
+    private User user;
 }

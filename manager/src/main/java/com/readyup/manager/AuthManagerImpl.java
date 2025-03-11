@@ -1,36 +1,35 @@
 package com.readyup.manager;
-
-import com.readyup.domain.Person;
 import com.readyup.manager.definitions.AuthManager;
-import com.readyup.manager.definitions.PersonManager;
+import org.springframework.stereotype.Service;
+
+import com.readyup.domain.User;
+import com.readyup.manager.definitions.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 public class AuthManagerImpl implements AuthManager {
-
     private final AuthenticationManager authenticationManager;
-    private final PersonManager personManager;
+    private final UserManager userManager;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthManagerImpl(AuthenticationManager authenticationManager, PersonManager personManager, PasswordEncoder passwordEncoder) {
+    public AuthManagerImpl(AuthenticationManager authenticationManager, UserManager userManager, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
-        this.personManager = personManager;
+        this.userManager = userManager;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public Boolean existsByUsername(String username) {
-        return personManager.personExists(username);
+        return userManager.userExists(username);
     }
 
     @Override
-    public void createUser(Person person) {
+    public void createUser(User person) {
         person.setPassword(encodePassword(person.getPassword()));
-        personManager.createPerson(person);
+        userManager.createUser(person);
     }
 
     @Override

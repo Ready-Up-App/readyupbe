@@ -1,16 +1,13 @@
 package com.readyup.api.endpoint;
 
 import com.readyup.api.endpointdefinition.AuthEndpointDefinition;
-import com.readyup.api.request.RefreshTokenRequest;
 import com.readyup.api.request.SignInRequest;
 import com.readyup.api.request.SignUpRequest;
-import com.readyup.api.response.RefreshTokenResponse;
 import com.readyup.api.response.SignInResponse;
 import com.readyup.api.response.SignUpResponse;
 import com.readyup.api.validator.Validator;
-import com.readyup.domain.Person;
+import com.readyup.domain.User;
 import com.readyup.manager.definitions.AuthManager;
-import com.readyup.manager.util.StringUtil;
 import com.readyup.security.jwt.JwtGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,13 +40,14 @@ public class AuthEndpoint implements AuthEndpointDefinition {
         if (authManager.existsByUsername(request.getUsername())) {
             return new ResponseEntity<>(new SignUpResponse("That username is taken!"), HttpStatus.BAD_REQUEST);
         }
-        Person newPerson = Person.builder()
+        User newUser = User.builder()
                 .username(request.getUsername())
                 .password(request.getPassword())
                 .email(request.getEmail())
                 .firstname(request.getFirstname())
-                    .build();
-        authManager.createUser(newPerson);
+                .build();
+
+        authManager.createUser(newUser);
         SignUpResponse response =  new SignUpResponse();
         response.setAccessToken(authenticate(request.getUsername(), request.getPassword()));
         return new ResponseEntity<>(response, HttpStatus.OK);

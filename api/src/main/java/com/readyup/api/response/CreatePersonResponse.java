@@ -1,6 +1,6 @@
 package com.readyup.api.response;
 
-import com.readyup.domain.Person;
+import com.readyup.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CreatePersonResponse extends BaseResponse{
-    private Person createdPerson;
+    private User createdUser;
 
 }

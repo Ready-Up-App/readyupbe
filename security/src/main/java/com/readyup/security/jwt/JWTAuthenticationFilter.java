@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,11 +23,20 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private JwtGenerator jwtGenerator;
     @Autowired
     private CustomUserDetailService userDetailService;
+    private RequestMatcher nonAuthEndpoint;
+
+    public JWTAuthenticationFilter(RequestMatcher requestMatcher) {
+        this.nonAuthEndpoint = requestMatcher;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        if (nonAuthEndpoint.matches(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         String token = getJwtFromRequest(request);
         if (token != null && jwtGenerator.validateToken(token)) {
             String username = jwtGenerator.getUsernameFromJWT(token);

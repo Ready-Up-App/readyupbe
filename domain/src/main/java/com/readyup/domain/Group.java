@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,7 +21,7 @@ public class Group {
     private String name;
     private LocalDateTime createDtm;
     private String description;
-    private List<Person> attendees;
+    private List<User> attendees;
     private Boolean readyStatus;
 
     @JsonIgnore

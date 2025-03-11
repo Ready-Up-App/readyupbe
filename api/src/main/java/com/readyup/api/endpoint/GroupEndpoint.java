@@ -4,7 +4,6 @@ import com.readyup.api.request.CreateGroupRequest;
 import com.readyup.api.request.JoinGroupRequest;
 import com.readyup.api.response.GroupResponse;
 import com.readyup.domain.Group;
-import com.readyup.domain.Person;
 import com.readyup.manager.definitions.GroupManager;
 
 import com.readyup.security.jwt.JwtGenerator;
@@ -32,17 +31,17 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     @PostMapping(value = "/create")
     public ResponseEntity<Boolean> create(String bearerToken, CreateGroupRequest request) {
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
-        Boolean response = groupManager.create(username, request.getGroup());
-        return ResponseEntity.ok(response);
+//        Boolean response = groupManager.create(username, request.getGroup());
+        return ResponseEntity.ok(true);
     }
 
     @Override
     @GetMapping(value = "/delete")
     public ResponseEntity<Boolean> delete(String bearerToken) {
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
-        if (!groupManager.delete(username)) {
-            return ResponseEntity.unprocessableEntity().body(false);
-        }
+//        if (!groupManager.delete(username)) {
+//            return ResponseEntity.unprocessableEntity().body(false);
+//        }
 
         return ResponseEntity.ok(true);
     }
@@ -52,14 +51,15 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     public ResponseEntity<GroupResponse> getGroupFor(String bearerToken) {
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
 
-        Group response = groupManager.getGroupFor(username);
-        return ResponseEntity.ok(new GroupResponse(response));
+//        Group response = groupManager.getGroupFor(username);
+        return ResponseEntity.ok(new GroupResponse());
     }
 
     @Override
     @GetMapping(value = "/getAll")
     public ResponseEntity<List<Group>> getAllGroups() {
-        return ResponseEntity.ok(groupManager.getAllGroups());
+        return ResponseEntity.ok(null);
+//        return ResponseEntity.ok(groupManager.getAllGroups());
     }
 
     @Override
@@ -67,7 +67,7 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     public ResponseEntity<Group> joinGroup(String bearerToken, JoinGroupRequest request) {
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
 
-        groupManager.addMember(username, request.getGroupId());
+//        groupManager.addMember(username, request.getGroupId());
         return ResponseEntity.ok().build();
     }
 
@@ -76,8 +76,8 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     public ResponseEntity<List<Group>> getJoinableGroups(String bearerToken) {
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
 
-        List<Group> groups = groupManager.getJoinableGroups(username);
-        return ResponseEntity.ok(groups);
+//        List<Group> groups = groupManager.getJoinableGroups(username);
+        return ResponseEntity.ok(null);
     }
 
     @Override
@@ -86,11 +86,11 @@ public class GroupEndpoint implements GroupEndpointDefinition {
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
         Boolean leftGroup;
         try{
-            leftGroup = groupManager.leaveGroup(username);
+//            leftGroup = groupManager.leaveGroup(username);
         } catch (Exception e) {
             return ResponseEntity.unprocessableEntity().body(false);
         }
 
-        return ResponseEntity.ok(leftGroup);
+        return ResponseEntity.ok(null);
     }
 }

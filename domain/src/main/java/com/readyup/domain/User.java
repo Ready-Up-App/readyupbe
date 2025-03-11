@@ -1,7 +1,6 @@
 package com.readyup.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
@@ -11,9 +10,9 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class Person {
+public class User {
 
-    private Long id;
+    private String id;
 
     private String firstname;
     private String email;
@@ -22,10 +21,9 @@ public class Person {
     @JsonIgnore
     private String password;
 
-    private String createDtm;
 
     @JsonIgnore
-    private List<Person> friendsList;
+    private List<Friend> friendsList;
 
     private Boolean readyStatus;
 //    private Group group;

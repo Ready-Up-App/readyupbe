@@ -18,7 +18,7 @@
 		<start-class>com.readyup.SpringbootApplication</start-class>
 	</properties>
 
-    <dependencies>
+	<dependencies>
 		<dependency>
             <groupId>org.springframework.plugin</groupId>
             <artifactId>spring-plugin-core</artifactId>

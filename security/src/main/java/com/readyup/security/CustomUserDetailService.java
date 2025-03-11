@@ -1,7 +1,7 @@
 package com.readyup.security;
 
-import com.readyup.ri.entity.PersonEntity;
-import com.readyup.ri.repository.PersonRepository;
+import com.readyup.ri.entity.UserEntity;
+import com.readyup.ri.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -15,16 +15,17 @@ import java.util.List;
 @Service
 public class CustomUserDetailService implements UserDetailsService {
 
-    private final PersonRepository personRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CustomUserDetailService(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    public CustomUserDetailService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        PersonEntity person = personRepository.findPerson(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        UserEntity person = userRepository.findUser(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
         //TODO: create roles for people
         return new User(person.getUsername(), person.getPassword(), List.of(new SimpleGrantedAuthority("user")));

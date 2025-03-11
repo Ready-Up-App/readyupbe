@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.1</version>
+		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -21,8 +21,16 @@
 
 	<repositories>
 		<repository>
+			<id>maven-central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
+		</repository>
+		<repository>
+			<id>azure-spring-repo</id>
+			<url>https://maven.pkg.github.com/Azure/azure-sdk-for-java</url>
 		</repository>
 	</repositories>
 
