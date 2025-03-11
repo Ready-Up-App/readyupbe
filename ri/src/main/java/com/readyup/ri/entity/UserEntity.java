@@ -23,7 +23,8 @@ public class UserEntity {
     private String email;
 
     private List<FriendEntity> friendsList;
-//
+
+    private String pushToken;
 //    @Relationship(type = "STATUS", direction = Relationship.Direction.OUTGOING)
 //    private ReadyStatusEntity readyStatus;
 //

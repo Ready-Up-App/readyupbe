@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
 public interface PushNotificationEndpointDefinition {
-//    @ApiOperation(value = "setToken")
-//    ResponseEntity setToken(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody String pushToken);
-//
-//    @ApiOperation(value = "getToken")
-//    ResponseEntity getToken(@RequestHeader(name = "Authorization") String bearerToken);
+    @ApiOperation(value = "setToken")
+    ResponseEntity setToken(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody String pushToken);
+
+    @ApiOperation(value = "getToken")
+    ResponseEntity getToken(@RequestHeader(name = "Authorization") String bearerToken);
 
 }

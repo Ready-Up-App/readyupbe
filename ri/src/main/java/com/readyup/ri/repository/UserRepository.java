@@ -34,4 +34,8 @@ public class UserRepository {
     public UserEntity createUser(UserEntity user) {
         return userRepositoryJpa.save(user);
     }
+
+    public List<UserEntity> searchUsername(String username) {
+        return userRepositoryJpa.searchUsername(username);
+    }
 }
