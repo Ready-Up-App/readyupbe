@@ -1,7 +1,9 @@
 package com.readyup.ri.repository;
 
 import com.azure.cosmos.models.PartitionKey;
+import com.readyup.ri.entity.GroupEntity;
 import com.readyup.ri.entity.UserEntity;
+import com.readyup.ri.entity.UserGroupEntity;
 import com.readyup.ri.repository.jpa.UserRepositoryJpa;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
@@ -23,6 +25,11 @@ public class UserRepository {
         this.userRepositoryJpa = personRepositoryJpa;
     }
 
+    //wrapper for JPA save
+    public UserEntity save(UserEntity user) {
+        return userRepositoryJpa.save(user);
+    }
+
     //Expensive operation, do not do lightly
     public Iterable<UserEntity> findAllUsers() {
         return userRepositoryJpa.findAll();
@@ -31,7 +38,21 @@ public class UserRepository {
     public Optional<UserEntity> findUser(String username) {
         return userRepositoryJpa.findByUsername(username).stream().findFirst();
     }
+
+    public Optional<UserEntity> getUser(String id, String username) {
+        return userRepositoryJpa.findById(id, new PartitionKey(username));
+    }
+
     public UserEntity createUser(UserEntity user) {
         return userRepositoryJpa.save(user);
+    }
+
+    public List<UserEntity> searchUsername(String username) {
+        return userRepositoryJpa.searchUsername(username);
+    }
+
+    public Optional<UserGroupEntity> getUserGroup(String username) {
+        Optional<UserEntity> foundUser = findUser(username);
+        return foundUser.map(UserEntity::getGroup);
     }
 }

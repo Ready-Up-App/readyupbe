@@ -21,16 +21,16 @@ public class Group {
     private String name;
     private LocalDateTime createDtm;
     private String description;
-    private List<User> attendees;
-    private Boolean readyStatus;
+    private List<Attendee> attendees;
+//    private Boolean readyStatus;
 
-    @JsonIgnore
-    public Map<String, Object> getProps() {
-        Map<String, Object> props = new HashMap<>();
-        props.put("name", name);
-        props.put("description", description == null ? "" : description);
-        props.put("crt_dtm", createDtm == null ? LocalDateTime.now() : createDtm);
-
-        return props;
-    }
+//    @JsonIgnore
+//    public Map<String, Object> getProps() {
+//        Map<String, Object> props = new HashMap<>();
+//        props.put("name", name);
+//        props.put("description", description == null ? "" : description);
+//        props.put("crt_dtm", createDtm == null ? LocalDateTime.now() : createDtm);
+//
+//        return props;
+//    }
 }

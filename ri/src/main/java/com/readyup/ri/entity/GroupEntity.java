@@ -1,41 +1,35 @@
-//package com.readyup.ri.entity;
-//
-//import com.readyup.ri.relationship.MemberOf;
-//import lombok.Builder;
-//import lombok.Data;
-//import org.springframework.data.neo4j.core.schema.*;
-//
-//import java.time.LocalDateTime;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//
-//@Node("Group")
-//@Data
-//public class GroupEntity {
-//
-//    @Id
-//    @GeneratedValue
-//    private String id;
-//
-//    @Property("name")
-//    private String name;
-//
-//    @Property("description")
-//    private String description;
-//
-//    @Property("crt_dtm")
+package com.readyup.ri.entity;
+
+import com.azure.spring.data.cosmos.core.mapping.Container;
+import com.azure.spring.data.cosmos.core.mapping.GeneratedValue;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+@Container(containerName = "Group")
+@Data
+public class GroupEntity {
+
+    @Id
+    @GeneratedValue
+    private String id;
+
+    private String name;
+
+    private String description;
+
 //    private LocalDateTime createDtm;
-//
-//    @Relationship(type = "MEMBER_OF", direction = Relationship.Direction.INCOMING)
-//    private List<MemberOf> attendees = new ArrayList<>();
-//
-//    @Relationship(type = "STATUS", direction = Relationship.Direction.OUTGOING)
+
+    private List<AttendeeEntity> attendees = new ArrayList<>();
+
 //    private ReadyStatusEntity readyStatus;
-//
-//    public GroupEntity() {}
-//
-//
+
+    public GroupEntity() {}
+
+
 //    public void addGroupMember(PersonEntity person) {
 //        MemberOf rel;
 //        if (attendees == null) {
@@ -47,4 +41,4 @@
 //        rel = MemberOf.builder().attendee(person).owner(false).build();
 //        attendees.add(rel);
 //    }
-//}
+}

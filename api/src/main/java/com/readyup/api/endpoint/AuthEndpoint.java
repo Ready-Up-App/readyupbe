@@ -38,7 +38,7 @@ public class AuthEndpoint implements AuthEndpointDefinition {
             return ResponseEntity.badRequest().build();
         }
         if (authManager.existsByUsername(request.getUsername())) {
-            return new ResponseEntity<>(new SignUpResponse("That username is taken!"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         User newUser = User.builder()
                 .username(request.getUsername())

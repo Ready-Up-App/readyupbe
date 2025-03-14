@@ -8,7 +8,7 @@ public class SignUpResponse extends BaseResponse{
     private String accessToken;
 
     public SignUpResponse(String errorRsn) {
-        failReason = errorRsn;
+//        failReason = errorRsn;
     }
     public SignUpResponse() {}
 
