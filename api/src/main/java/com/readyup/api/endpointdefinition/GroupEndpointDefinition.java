@@ -1,6 +1,8 @@
 package com.readyup.api.endpointdefinition;
 
 import com.readyup.api.request.CreateGroupRequest;
+import com.readyup.api.request.DeleteGroupRequest;
+import com.readyup.api.request.GetCurrentGroupRequest;
 import com.readyup.api.request.JoinGroupRequest;
 import com.readyup.api.response.GroupResponse;
 import com.readyup.domain.Group;
@@ -20,13 +22,13 @@ import java.util.List;
 public interface GroupEndpointDefinition {
 
     @ApiOperation(value = "Create a new group, error if exists")
-    ResponseEntity<Boolean> create(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody CreateGroupRequest request);
+    ResponseEntity create(@RequestHeader(name = "Authorization") String bearerToken, @RequestBody CreateGroupRequest request);
 
     @ApiOperation(value = "Delete users group, error if exists")
-    ResponseEntity<Boolean> delete(@RequestHeader(name = "Authorization")String bearerToken);
+    ResponseEntity<Boolean> delete(@RequestHeader(name = "Authorization")String bearerToken, @RequestBody DeleteGroupRequest deleteRequest);
 
     @ApiOperation(value = "Get group, error or null if not exist")
-    ResponseEntity<GroupResponse> getGroupFor(@RequestHeader(name = "Authorization") String bearerToken);
+    ResponseEntity<GroupResponse> getCurrentGroup(@RequestHeader(name = "Authorization") String bearerToken);
 
     @ApiOperation(value = "Get all groups")
     ResponseEntity<List<Group>> getAllGroups();

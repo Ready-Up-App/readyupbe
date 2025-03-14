@@ -1,6 +1,7 @@
 package com.readyup.manager.definitions;
 
 import com.readyup.domain.Friend;
+import com.readyup.domain.Group;
 import com.readyup.domain.SearchedPerson;
 import com.readyup.domain.User;
 

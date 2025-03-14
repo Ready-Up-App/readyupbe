@@ -8,5 +8,4 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public abstract class BaseResponse {
-    protected String failReason = null;
 }

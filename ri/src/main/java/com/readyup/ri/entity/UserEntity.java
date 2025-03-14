@@ -5,8 +5,6 @@ import com.azure.spring.data.cosmos.core.mapping.GeneratedValue;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Container(containerName = "User")
@@ -25,6 +23,8 @@ public class UserEntity {
     private List<FriendEntity> friendsList;
 
     private String pushToken;
+
+    private UserGroupEntity group;
 //    @Relationship(type = "STATUS", direction = Relationship.Direction.OUTGOING)
 //    private ReadyStatusEntity readyStatus;
 //

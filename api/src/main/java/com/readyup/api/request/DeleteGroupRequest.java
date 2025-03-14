@@ -5,7 +5,7 @@ import com.readyup.domain.User;
 import lombok.Data;
 
 @Data
-public class CreateGroupRequest {
+public class DeleteGroupRequest {
     private User user;
     private Group group;
 }
