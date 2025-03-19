@@ -1,6 +1,8 @@
 package com.readyup.ri.repository;
 
 
+import com.readyup.ri.aspect.UpdateReadyStatus;
+import com.readyup.ri.entity.AttendeeEntity;
 import com.readyup.ri.entity.GroupEntity;
 import com.readyup.ri.entity.UserEntity;
 import com.readyup.ri.entity.UserGroupEntity;
@@ -11,9 +13,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.locks.ReadWriteLock;
+import java.util.stream.Collectors;
 
 @Repository
 public class GroupRepository {
+
+    private static final String NO_GROUP_FOUND  = "Group not found";
 
     private final GroupRepositoryJpa groupRepositoryJpa;
 
@@ -34,11 +39,6 @@ public class GroupRepository {
 //            //group exists and should update
 //            return groupRepositoryJpa.save(groupEntity);
 //        }
-        return null;
-    }
-
-    public Optional<GroupEntity> getGroupFor(String username) {
-//        return groupRepositoryJpa.findByAttendee(username);
         return null;
     }
 
@@ -66,13 +66,27 @@ public class GroupRepository {
         return null;
     }
 
-    public Boolean leaveGroup(String username) {
-//        GroupEntity leftGroup = groupRepositoryJpa.leaveGroup(username);
-//        if (leftGroup != null) {
-//            groupRepositoryJpa.setReady(leftGroup.getId(), false);
-//        }
-//        return leftGroup != null;
-        return null;
+    @UpdateReadyStatus
+    public GroupEntity leaveGroup(String groupId, String leaverUsername) {
+        Optional<GroupEntity> leftGroup = groupRepositoryJpa.findById(groupId);
+
+        if (leftGroup.isEmpty()) {
+            throw new RuntimeException(NO_GROUP_FOUND);
+        }
+
+        //Check if leaver is owner
+        if (leftGroup.get().getOwner().getUsername().equals(leaverUsername)) {
+            throw new RuntimeException("Owner cannot leave a group, they must delete it");
+        }
+
+        List<AttendeeEntity> removedAttendee = leftGroup.get().getAttendees()
+                .stream()
+                .filter(attendee -> !leaverUsername.equals(attendee.getUsername()))
+                .collect(Collectors.toList());
+
+        leftGroup.get().setAttendees(removedAttendee);
+
+        return groupRepositoryJpa.save(leftGroup.get());
     }
 
     public Boolean isOwnerOfGroup(String username) {

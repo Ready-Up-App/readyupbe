@@ -2,7 +2,6 @@ package com.readyup.manager.definitions;
 
 import com.readyup.domain.Group;
 import com.readyup.domain.User;
-import com.readyup.ri.entity.UserGroupEntity;
 
 import java.util.List;
 
@@ -17,5 +16,5 @@ public interface GroupManager {
     void addMember(String username, String id);
 
     List<Group> getJoinableGroups(String username);
-    Boolean leaveGroup(String username);
+    User leaveGroup(String groupId, String username);
 }

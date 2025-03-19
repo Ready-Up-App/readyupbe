@@ -37,9 +37,13 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public User getUser(String username) {
-        UserEntity person = userRepository.findUser(username).orElse(null);
+        Optional<UserEntity> foundUser = userRepository.findUser(username);
 
-        return UserMapper.INSTANCE.map(person);
+        if (foundUser.isEmpty()) {
+            throw new RuntimeException("No user found");
+        }
+
+        return UserMapper.INSTANCE.map(foundUser.get());
     }
 
     @Override

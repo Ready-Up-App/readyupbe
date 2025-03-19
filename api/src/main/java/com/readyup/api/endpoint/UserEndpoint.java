@@ -1,10 +1,7 @@
 package com.readyup.api.endpoint;
 
 import com.readyup.api.endpointdefinition.UserEndpointDefinition;
-import com.readyup.api.request.FriendRequest;
-import com.readyup.api.request.RespondFriendRequest;
-import com.readyup.api.request.SearchUsernameRequest;
-import com.readyup.api.request.SetReadyStatusRequest;
+import com.readyup.api.request.*;
 import com.readyup.api.response.GetFriendsResponse;
 import com.readyup.api.response.SetReadyStatusResponse;
 import com.readyup.domain.SearchedPerson;
@@ -35,6 +32,15 @@ public class UserEndpoint implements UserEndpointDefinition {
         return ResponseEntity.ok(userManager.getAllUsers());
     }
 
+
+    @Override
+    @GetMapping(value = "/getUser")
+    public ResponseEntity<User> getUser(String bearerToken) {
+        String username = jwtGenerator.getUsernameFromBearer(bearerToken);
+
+        User foundUser = userManager.getUser(username);
+        return ResponseEntity.ok(foundUser);
+    }
 
     @Override
     @PostMapping(value = "/friendRequest")

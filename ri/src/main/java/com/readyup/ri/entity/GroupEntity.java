@@ -23,9 +23,10 @@ public class GroupEntity {
 
 //    private LocalDateTime createDtm;
 
+    private AttendeeEntity owner;
     private List<AttendeeEntity> attendees = new ArrayList<>();
 
-//    private ReadyStatusEntity readyStatus;
+    private String readyStatus;
 
     public GroupEntity() {}
 

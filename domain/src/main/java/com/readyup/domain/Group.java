@@ -19,10 +19,11 @@ public class Group {
 
     private String id;
     private String name;
-    private LocalDateTime createDtm;
     private String description;
+    private Boolean isOwner;
     private List<Attendee> attendees;
-//    private Boolean readyStatus;
+    private Boolean readyStatus;
+    private LocalDateTime createDtm;
 
 //    @JsonIgnore
 //    public Map<String, Object> getProps() {

@@ -1,14 +1,12 @@
 package com.readyup.api.endpoint;
 
-import com.readyup.api.request.CreateGroupRequest;
-import com.readyup.api.request.DeleteGroupRequest;
-import com.readyup.api.request.GetCurrentGroupRequest;
-import com.readyup.api.request.JoinGroupRequest;
+import com.readyup.api.request.*;
 import com.readyup.api.response.GroupResponse;
+import com.readyup.api.response.LeaveGroupResponse;
 import com.readyup.domain.Group;
+import com.readyup.domain.User;
 import com.readyup.manager.definitions.GroupManager;
 
-import com.readyup.ri.entity.UserGroupEntity;
 import com.readyup.security.jwt.JwtGenerator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,8 +48,8 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     }
 
     @Override
-    @PostMapping(value = "/delete")
-    public ResponseEntity<Boolean> delete(String bearerToken, DeleteGroupRequest request) {
+    @PostMapping(value = "/deleteGroup")
+    public ResponseEntity<Boolean> deleteGroup(String bearerToken, DeleteGroupRequest request) {
         //validate request
         if (request.getGroup() == null) {
             throw new RuntimeException("Group must not be null");
@@ -79,11 +77,11 @@ public class GroupEndpoint implements GroupEndpointDefinition {
         return ResponseEntity.ok(new GroupResponse(response));
     }
 
-    @Override
-    @GetMapping(value = "/getAll")
-    public ResponseEntity<List<Group>> getAllGroups() {
-        return ResponseEntity.ok(groupManager.getAllGroups());
-    }
+//    @Override
+//    @GetMapping(value = "/getAll")
+//    public ResponseEntity<List<Group>> getAllGroups() {
+//        return ResponseEntity.ok(groupManager.getAllGroups());
+//    }
 
     @Override
     @PostMapping(value = "/joinGroup")
@@ -104,16 +102,11 @@ public class GroupEndpoint implements GroupEndpointDefinition {
     }
 
     @Override
-    @GetMapping(value = "/leaveGroup")
-    public ResponseEntity<Boolean> leaveGroup(String bearerToken) {
+    @PostMapping(value = "/leaveGroup")
+    public ResponseEntity<LeaveGroupResponse> leaveGroup(String bearerToken, LeaveGroupRequest request) {
         String username = jwtGenerator.getUsernameFromBearer(bearerToken);
-        Boolean leftGroup;
-        try{
-            leftGroup = groupManager.leaveGroup(username);
-        } catch (Exception e) {
-            return ResponseEntity.unprocessableEntity().body(false);
-        }
+        User user = groupManager.leaveGroup(request.getGroup().getId(), username);
 
-        return ResponseEntity.ok(leftGroup);
+        return ResponseEntity.ok(LeaveGroupResponse.builder().user(user).build());
     }
 }

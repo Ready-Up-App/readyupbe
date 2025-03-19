@@ -5,6 +5,7 @@ import com.readyup.ri.entity.GroupEntity;
 import com.readyup.ri.entity.UserEntity;
 import com.readyup.ri.entity.UserGroupEntity;
 import com.readyup.ri.repository.jpa.UserRepositoryJpa;
+import org.javatuples.Pair;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,8 @@ import java.util.stream.Collectors;
 
 @Repository
 public class UserRepository {
+
+    private static String USER_NOT_FOUND = "User not found";
 
     private final UserRepositoryJpa userRepositoryJpa;
 
@@ -54,5 +57,18 @@ public class UserRepository {
     public Optional<UserGroupEntity> getUserGroup(String username) {
         Optional<UserEntity> foundUser = findUser(username);
         return foundUser.map(UserEntity::getGroup);
+    }
+
+    public UserEntity leaveGroup(String username) {
+        Optional<UserEntity> foundUser = findUser(username);
+
+        foundUser.orElseThrow(() -> new RuntimeException(USER_NOT_FOUND)).setGroup(null);
+
+        return userRepositoryJpa.save(foundUser.get());
+    }
+
+    public void updateAttendeesOfDisband(List<Pair<String,String>> attendees) {
+        userRepositoryJpa.findAllById();
+        attendees.forEach();
     }
 }

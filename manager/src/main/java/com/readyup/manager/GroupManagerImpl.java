@@ -3,20 +3,25 @@ package com.readyup.manager;
 import com.readyup.domain.Group;
 import com.readyup.domain.User;
 import com.readyup.manager.definitions.GroupManager;
-import com.readyup.manager.definitions.UserManager;
 import com.readyup.manager.mapper.GroupMapper;
+import com.readyup.manager.mapper.UserMapper;
+import com.readyup.ri.entity.AttendeeEntity;
 import com.readyup.ri.entity.GroupEntity;
 import com.readyup.ri.entity.UserEntity;
 import com.readyup.ri.entity.UserGroupEntity;
 import com.readyup.ri.repository.GroupRepository;
 import com.readyup.ri.repository.UserRepository;
+import org.javatuples.Pair;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class GroupManagerImpl implements GroupManager {
+
+    private static final String NO_GROUP_FOUND  = "Group not found";
 
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
@@ -38,7 +43,15 @@ public class GroupManagerImpl implements GroupManager {
             throw new RuntimeException("User is already in a group");
         }
 
-        GroupEntity newGroup = groupRepository.create(GroupMapper.INSTANCE.map(group));
+        GroupEntity newGroup =  GroupMapper.INSTANCE.map(group);
+        newGroup.setOwner(AttendeeEntity.builder()
+                .id(owner.getId())
+                .username(owner.getUsername())
+                .readyStatus(false)
+                .build());
+
+        newGroup = groupRepository.create(newGroup);
+
         foundUser.get().setGroup(GroupMapper.INSTANCE.mapToUserGroup(newGroup));
         userRepository.save(foundUser.get());
     }
@@ -53,6 +66,18 @@ public class GroupManagerImpl implements GroupManager {
         if (foundUser.get().getGroup() == null) {
             throw new RuntimeException("User Is not in a group");
         }
+        Optional<GroupEntity> groupToDelete = groupRepository.getGroup(group.getId());
+        if (groupToDelete.isEmpty()) {
+            throw new RuntimeException(NO_GROUP_FOUND);
+        }
+
+
+        List<Pair<String, String>> idUsers = new ArrayList<>();
+        groupToDelete.get()
+                .getAttendees()
+                .forEach(attendee -> idUsers.add(new Pair<>(attendee.getId(), attendee.getUsername())));
+
+        userRepository.;
         groupRepository.delete(GroupMapper.INSTANCE.map(group));
         foundUser.get().setGroup(null);
         userRepository.save(foundUser.get());
@@ -67,7 +92,7 @@ public class GroupManagerImpl implements GroupManager {
             return null;
         }
         GroupEntity foundGroup = groupRepository.getGroup(currGroup.get().getId())
-                .orElseThrow(() -> new RuntimeException("Group not found!"));
+                .orElseThrow(() -> new RuntimeException(NO_GROUP_FOUND));
         return GroupMapper.INSTANCE.map(foundGroup);
     }
 
@@ -89,12 +114,10 @@ public class GroupManagerImpl implements GroupManager {
     }
 
     @Override
-    public Boolean leaveGroup(String username) {
-        if(groupRepository.isOwnerOfGroup(username)) {
-            //cant leave a group, must delete it
-            throw new RuntimeException("Owner cannot leave a group, they must delete it");
-        }
-        return groupRepository.leaveGroup(username);
+    public User leaveGroup(String groupId, String username) {
+
+        groupRepository.leaveGroup(groupId, username);
+        return UserMapper.INSTANCE.map(userRepository.leaveGroup(username));
     }
 
     @Override
